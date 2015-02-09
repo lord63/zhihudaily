@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+  <h2>知乎日报</h2>
+  <ul>
+    <li>{{ date }}</li>
+    {% for item in lists %}
+    <li><a href={{ item[1] }}>{{ item[0] }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
