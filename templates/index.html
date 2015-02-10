@@ -13,9 +13,7 @@
     </nav>
     <h3>知乎日报</h3>
   </div>
-  <!-- <h2>知乎日报</h2> -->
   <ul>
-    <!-- <li>{{ date }}</li> -->
     <h3>{{ display_date }}</h3>
     {% for item in lists %}
     <!-- <li><a href={{ item[1] }}>{{ item[0] }}</a></li> -->
@@ -27,7 +25,9 @@
       <!-- <li role="presentation"><a href="#"><<< Next</a></li> -->
     <!-- </ul> -->
     <ul class="nav nav-pills pull-right">
-        <li role="presentation"><a href="{{ url_for('index',date=date) }}">Before >>></a></li>
+      <li role="presentation">
+        <a href="{{ url_for('before',date=date) }}">Before >>></a>
+      </li>
     </ul>
   </nav>
 {% endblock %}
