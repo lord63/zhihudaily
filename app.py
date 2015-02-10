@@ -18,18 +18,19 @@ def index():
     if date:
         r = session.get(
             'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date))
-        story_list = []
+        # story_list = []
     else:
         r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
         print 'yes'
-        story_list = [
-            [item['title'], item['share_url']] for item in r.json()['top_stories']]
+        # story_list = [
+            # [item['title'], item['share_url']] for item in r.json()['top_stories']]
     display_date = r.json()['display_date']
     date = r.json()["date"]
     news_list = [
         [item['title'], item['share_url']] for item in r.json()['news']]
-    lists = story_list + news_list
-    return render_template("index.html", lists=lists, display_date=display_date, date=date)
+    # lists = story_list + news_list
+    return render_template("index.html", lists=news_list,
+                           display_date=display_date, date=date)
 
 
 if __name__ == '__main__':
