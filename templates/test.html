@@ -2,9 +2,9 @@
 {% block body %}
   <div class="news_content">
   {% for item in lists %}
-    <div class="col-sm-4">
+    <div class="col-md-3">
       <a href="{{ item['share_url'] }}"><img src="{{ item['image'] }}" width="200px" height="200px"></a>
-      <p>{{ item['title'] }}</p>
+      <p class="title">{{ item['title'] }}</p>
     </div>
   {% endfor %}
   </div>
