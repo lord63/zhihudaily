@@ -39,5 +39,17 @@ def index():
                            display_date=display_date, date=date)
 
 
+@app.route('/test')
+def test():
+    session = requests.Session()
+    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
+                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
+    r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
+    display_date = r.json()['display_date']
+    date = r.json()["date"]
+    news_list = [item for item in r.json()['news']]
+    return  render_template('test.html', lists=news_list,
+                            display_date=display_date,date=date)
+
 if __name__ == '__main__':
     app.run(debug=True)

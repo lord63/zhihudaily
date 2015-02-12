@@ -60,3 +60,6 @@ venv/
 
 # temp folder
 temp/
+
+# pycharm folder
+.idea/

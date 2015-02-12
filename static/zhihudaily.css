@@ -17,8 +17,13 @@ body {
 }
 
 .header h3 {
-  padding-bottom: 19px;
+  padding-bottom: 20px;
   margin-top: 0;
   margin-bottom: 0;
   line-height: 40px;
+}
+
+.news_content {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
