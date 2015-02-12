@@ -1,29 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
-  <div class="header">
-    <nav>
-      <ul class="nav nav-pills pull-right">
-        <li class="active" role="presentation">
-        <a href="{{ url_for('index') }}">Home</a>
-        </li>
-        <li role="presentation">
-          <a href="#">About</a>
-        </li>
-      </ul>
-    </nav>
-    <h3>知乎日报</h3>
-  </div>
   <ul>
     <h3>{{ display_date }}</h3>
     {% for item in lists %}
-    <!-- <li><a href={{ item[1] }}>{{ item[0] }}</a></li> -->
     <h4><a href={{ item[1] }}>{{ item[0] }}</a></h4>
     {% endfor %}
   </ul>
   <nav >
-    <!-- <ul class="nav nav-pills pull-left"> -->
-      <!-- <li role="presentation"><a href="#"><<< Next</a></li> -->
-    <!-- </ul> -->
     <ul class="nav nav-pills pull-right">
       <li role="presentation">
         <a href="{{ url_for('before',date=date) }}">Before >>></a>
