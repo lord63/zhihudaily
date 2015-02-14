@@ -33,6 +33,8 @@ body {
     margin-top: -50px;
     margin-bottom: 0;
     padding: 0 0 5px 5px;
+    background: rgba(0, 0, 0, 0.7);
+    position: relative;
 }
 
 .col-md-3 {
