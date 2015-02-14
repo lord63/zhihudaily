@@ -11,10 +11,6 @@ body {
     padding-right: 15px;
 }
 
-.header {
-    border-bottom: 1px solid #e5e5e5;
-}
-
 .header h3 {
     line-height: 40px;
     margin-bottom: 0;
@@ -22,9 +18,34 @@ body {
     padding-bottom: 20px;
 }
 
+.global-header {
+    background-color: #009dd7;
+    color: #fafcfe;
+    height: 60px;
+    top: 0;
+    width: 100%;
+    margin-top: -20px;
+}
+
+
+.web-logo {
+    background-image: url("/static/Web_Logo.png");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 42px;
+    vertical-align: middle;
+    width: 126px;
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
 .news_content {
     padding-top: 20px;
     padding-bottom: 20px;
+}
+
+.news_content h3 {
+    margin-top: 0;
 }
 
 .title {

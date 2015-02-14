@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
   <div class="news_content">
+  <h3>{{ display_date }}</h3><hr/>
   {% for item in lists %}
     <div class="col-md-3">
       <a href="{{ item['share_url'] }}"><img src="{{ item['image'] }}" width="200px" height="200px"></a>

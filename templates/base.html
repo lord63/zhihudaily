@@ -5,20 +5,14 @@
     <link rel=stylesheet type=text/css href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='zhihudaily.css') }}">
   </head>
-  <div class="container">
-    <div class="header">
-      <nav>
-        <ul class="nav nav-pills pull-right">
-          <li class="active" role="presentation">
-          <a href="{{ url_for('index') }}">Home</a>
-          </li>
-          <li role="presentation">
-            <a href="#">About</a>
-          </li>
-        </ul>
-      </nav>
-      <h3>知乎日报</h3>
+  <div class="global-header">
+    <div class="main-wrap">
+      <a title="知乎日报" target="_self" href="/">
+        <i class="web-logo"></i>
+      </a>
     </div>
+  </div>
+  <div class="container">
   {% block body %}{% endblock %}
   </div>
 </html>
