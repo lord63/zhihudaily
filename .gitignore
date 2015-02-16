@@ -63,3 +63,6 @@ temp/
 
 # pycharm folder
 .idea/
+
+# database
+*.db
