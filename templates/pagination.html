@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block body %}
+<nav>
+  <ul class="pagination">
+{#    {% if pages > 1 %}#}
+{#    <li>#}
+{#      <a href="/{{ pages-1 }}" aria-label="Previous">#}
+{#        <span aria-hidden="true">&laquo;</span>#}
+{#      </a>#}
+{#    </li>#}
+{#    {% endif %}#}
+    {% for page in range(1, pages+1) %}
+    <li><a href="/pages/{{ page }}">{{ page }}</a></li>
+    {% endfor %}
+{#    <li>#}
+{#      <a href="/{{ pages+1 }}" aria-label="Next">#}
+{#        <span aria-hidden="true">&raquo;</span>#}
+{#      </a>#}
+{#    </li>#}
+  </ul>
+</nav>
+{% endblock %}
