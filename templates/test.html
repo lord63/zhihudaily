@@ -5,7 +5,9 @@
   {% for item in lists %}
     <div class="col-md-3">
       <a href="{{ item['share_url'] }}"><img src="{{ item['image'] }}" width="300px" height="250px"></a>
-      <p class="title">{{ item['title'] }}</p>
+      <div class="title">
+        <p>{{ item['title'] }}</p>
+      </div>
     </div>
   {% endfor %}
   </div>
