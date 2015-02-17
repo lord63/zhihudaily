@@ -3,9 +3,10 @@
 
 from math import ceil
 import json
+import datetime
 
 import requests
-from flask import Flask, render_template, request, g
+from flask import Flask, render_template, request, g, redirect, url_for
 from peewee import *
 
 
@@ -51,11 +52,14 @@ def before(date):
     r = session.get(
         'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date))
     display_date = r.json()['display_date']
-    date = r.json()["date"]
+    strdate = r.json()["date"]
+    day_after = (datetime.datetime.strptime(date, '%Y%m%d') + datetime.timedelta(1)).strftime('%Y%m%d')
+    is_today = r.json().get('is_today', False)
     news_list = [
         [item['title'], item['share_url']] for item in r.json()['news']]
     return render_template("index.html", lists=news_list,
-                           display_date=display_date, date=date)
+                           display_date=display_date, date=strdate,
+                           is_today=is_today, day_after=day_after)
 
 
 @app.route('/')
@@ -65,11 +69,14 @@ def index():
                             x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
     r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
     display_date = r.json()['display_date']
-    date = r.json()["date"]
+    date = r.json()['date']
+    day_after = (datetime.datetime.strptime(date, '%Y%m%d') + datetime.timedelta(1)).strftime('%Y%m%d')
+    is_today = r.json().get('is_today', False)
     news_list = [
         [item['title'], item['share_url']] for item in r.json()['news']]
     return render_template("index.html", lists=news_list,
-                           display_date=display_date, date=date)
+                           display_date=display_date, date=date,
+                           is_today=is_today, day_after=day_after)
 
 
 @app.route('/withimage')

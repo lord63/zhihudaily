@@ -9,10 +9,17 @@
   </ul>
   </div>
   <nav >
-    <ul class="nav nav-pills pull-right">
+    <ul class="nav nav-pills pull-left">
       <li role="presentation">
-        <a href="{{ url_for('before',date=date) }}">Before >>></a>
+        <a href="{{ url_for('before',date=date) }}"><<< Previous</a>
       </li>
     </ul>
+    {% if not is_today%}
+    <ul class="nav nav-pills pull-right">
+      <li role="presentation">
+        <a href="{{ url_for('before',date=day_after) }}">Next >>></a>
+      </li>
+    </ul>
+    {% endif %}
   </nav>
 {% endblock %}
