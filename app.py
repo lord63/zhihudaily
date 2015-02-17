@@ -102,9 +102,10 @@ def pages(page=1):
     for i in news:
         temp = json.loads(i.json_news)
         records.append({"date": i.date, "news": temp})
+    pages = int(ceil(Zhihudaily.select().count() / 7))
     return render_template('pages.html', lists=news_list,
                            display_date=display_date, date=date,
-                           page=page, records=records)
+                           page=page, records=records, pages=pages)
 
 
 @app.route('/pagination')
