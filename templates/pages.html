@@ -17,7 +17,7 @@
   {% for record in records %}
    <br>
    <div class="news_content">
-  <h3>{{ record['date'] }}</h3><hr/>
+  <h3>{{ record['display_date'] }}</h3><hr/>
   {% for item in record['news'] %}
     <div class="col-md-3">
       <a href="{{ item['share_url'] }}"><img src="xxx" width="300px" height="250px"></a>

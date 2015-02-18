@@ -4,17 +4,20 @@
 from math import ceil
 import json
 import datetime
+import os
 
 import requests
 from flask import Flask, render_template, request, g, redirect, url_for
 from peewee import *
 
 
-app = Flask(__name__)
-app.config.from_object(__name__)
 SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
 
-database = SqliteDatabase('zhihudaily.db')
+app = Flask(__name__)
+app.config.from_object(__name__)
+
+db = os.path.dirname(os.path.abspath(__file__)) + '/zhihu.db'
+database = SqliteDatabase(db)
 
 
 class BaseModel(Model):
@@ -25,6 +28,7 @@ class BaseModel(Model):
 class Zhihudaily(BaseModel):
     date = IntegerField()
     json_news = CharField()
+    display_date = CharField()
 
 
 def create_tables():
@@ -113,7 +117,7 @@ def pages(page=1):
     records = []
     for i in news:
         temp = json.loads(i.json_news)
-        records.append({"date": i.date, "news": temp})
+        records.append({"date": i.date, "news": temp, "display_date": i.display_date})
     pages = int(ceil(Zhihudaily.select().count() / 7))
     return render_template('pages.html', lists=news_list,
                            display_date=display_date, date=date,
