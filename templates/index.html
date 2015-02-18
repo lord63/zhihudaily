@@ -4,7 +4,7 @@
   <ul>
     <h3>{{ display_date }}</h3>
     {% for item in lists %}
-    <h4><a href={{ item[1] }}>{{ item[0] }}</a></h4>
+    <h4><a href={{ item['share_url'] }}>{{ item['title'] }}</a></h4>
     {% endfor %}
   </ul>
   </div>

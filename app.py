@@ -45,6 +45,7 @@ def after_request(response):
 
 
 @app.route('/before/<date>')
+@app.route('/withimage/before/<date>')
 def before(date):
     session = requests.Session()
     session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
@@ -58,11 +59,15 @@ def before(date):
     if int(today) < int(date):
         return redirect(url_for('index'))
     is_today = r.json().get('is_today', False)
-    news_list = [
-        [item['title'], item['share_url']] for item in r.json()['news']]
-    return render_template("index.html", lists=news_list,
-                           display_date=display_date, date=strdate,
-                           is_today=is_today, day_after=day_after)
+    news_list = [item for item in r.json()['news']]
+    if 'withimage' in request.url:
+        return render_template('with_image.html', lists=news_list,
+                               display_date=display_date, date=strdate,
+                               is_today=is_today, day_after=day_after)
+    else:
+        return render_template("index.html", lists=news_list,
+                               display_date=display_date, date=strdate,
+                               is_today=is_today, day_after=day_after)
 
 
 @app.route('/')
@@ -73,8 +78,7 @@ def index():
     r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
     display_date = r.json()['display_date']
     date = r.json()['date']
-    news_list = [
-        [item['title'], item['share_url']] for item in r.json()['news']]
+    news_list = [item for item in r.json()['news']]
     return render_template("index.html", lists=news_list,
                            display_date=display_date, date=date,
                            is_today=True)
