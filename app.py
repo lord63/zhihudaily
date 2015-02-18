@@ -118,7 +118,7 @@ def pages(page=1):
     date = r.json()["date"]
     news_list = [item for item in r.json()['news']]
     request.environ['Referer'] = 'http://daily.zhihu.com/'
-    news = Zhihudaily.select().paginate(page, 7)
+    news = Zhihudaily.select().order_by(Zhihudaily.date.desc()).paginate(page, 7)
     records = []
     for i in news:
         temp = json.loads(i.json_news)
