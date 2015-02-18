@@ -58,15 +58,17 @@ def before(date):
     display_date = r.json()['display_date']
     today = datetime.date.today().strftime('%Y%m%d')
     strdate = r.json()["date"]
-    day_after = (datetime.datetime.strptime(date, '%Y%m%d') + datetime.timedelta(1)).strftime('%Y%m%d')
+    day_after = (
+        datetime.datetime.strptime(date, '%Y%m%d') + datetime.timedelta(1)
+    ).strftime('%Y%m%d')
     if int(today) < int(date):
-        if request.args['image']:
+        if request.args['image'] == 'True':
             return redirect(url_for('with_image'))
         else:
             return redirect(url_for('index'))
     is_today = r.json().get('is_today', False)
     news_list = [item for item in r.json()['news']]
-    if request.args['image']:
+    if request.args['image'] == 'True':
         return render_template('with_image.html', lists=news_list,
                                display_date=display_date, date=strdate,
                                is_today=is_today, day_after=day_after)
@@ -101,7 +103,8 @@ def with_image():
     news_list = [item for item in r.json()['news']]
     request.environ['Referer'] = 'http://daily.zhihu.com/'
     return render_template('with_image.html', lists=news_list,
-                           display_date=display_date, date=date)
+                           display_date=display_date, date=date,
+                           is_today=True)
 
 
 @app.route('/pages')
@@ -119,7 +122,8 @@ def pages(page=1):
     records = []
     for i in news:
         temp = json.loads(i.json_news)
-        records.append({"date": i.date, "news": temp, "display_date": i.display_date})
+        records.append({"date": i.date, "news": temp,
+                        "display_date": i.display_date})
     pages = int(ceil(Zhihudaily.select().count() / 7))
     return render_template('pages.html', lists=news_list,
                            display_date=display_date, date=date,
