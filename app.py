@@ -16,7 +16,7 @@ SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-db = os.path.dirname(os.path.abspath(__file__)) + '/zhihu.db'
+db = os.path.dirname(os.path.abspath(__file__)) + '/zhihudaily.db'
 database = SqliteDatabase(db)
 
 
@@ -49,7 +49,6 @@ def after_request(response):
 
 
 @app.route('/before/<date>')
-@app.route('/withimage/before/<date>')
 def before(date):
     session = requests.Session()
     session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
@@ -61,10 +60,13 @@ def before(date):
     strdate = r.json()["date"]
     day_after = (datetime.datetime.strptime(date, '%Y%m%d') + datetime.timedelta(1)).strftime('%Y%m%d')
     if int(today) < int(date):
-        return redirect(url_for('index'))
+        if request.args['image']:
+            return redirect(url_for('with_image'))
+        else:
+            return redirect(url_for('index'))
     is_today = r.json().get('is_today', False)
     news_list = [item for item in r.json()['news']]
-    if 'withimage' in request.url:
+    if request.args['image']:
         return render_template('with_image.html', lists=news_list,
                                display_date=display_date, date=strdate,
                                is_today=is_today, day_after=day_after)
