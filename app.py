@@ -8,6 +8,7 @@ import os
 
 import requests
 from flask import Flask, render_template, request, g, redirect, url_for
+from flask.ext.paginate import Pagination
 from peewee import *
 
 
@@ -124,10 +125,12 @@ def pages(page=1):
         temp = json.loads(i.json_news)
         records.append({"date": i.date, "news": temp,
                         "display_date": i.display_date})
-    pages = int(ceil(Zhihudaily.select().count() / 7))
+    pagination = Pagination(page=page, total=Zhihudaily.select().count(), per_page=7,
+                            inner_window=7, outer_window=3, css_framework='bootstrap3')
     return render_template('pages.html', lists=news_list,
                            display_date=display_date, date=date,
-                           page=page, records=records, pages=pages)
+                           page=page, records=records,
+                           pagination=pagination)
 
 
 @app.route('/pagination')
