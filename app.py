@@ -133,11 +133,5 @@ def pages(page=1):
                            pagination=pagination)
 
 
-@app.route('/pagination')
-def pagination():
-    pages = int(ceil(Zhihudaily.select().count() / 7))
-    return render_template('pagination.html', pages=pages)
-
-
 if __name__ == '__main__':
     app.run(debug=True)
