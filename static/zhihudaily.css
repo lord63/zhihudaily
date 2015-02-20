@@ -68,3 +68,8 @@ body {
 nav {
     clear: both;
 }
+
+.paginate {
+    text-align: center;
+    clear: both;
+}
