@@ -4,51 +4,71 @@
 import datetime
 import sqlite3
 import json
-import os
+from os import path
 import sys
 
 import requests
 
 
-def init_database():
-    db = sqlite3.connect(os.path.dirname(os.path.abspath(__file__)) +
-                         '/zhihudaily.db')
-    cursor = db.cursor()
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
+session = requests.Session()
+session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
+                        x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
+
+
+def save(database, response):
+    """Get someday's news info from the API and save to the database"""
+    cursor = database.cursor()
+    date = int(response.json()['date'])
+    json_news = json.dumps(response.json()['news'])
+    display_date = response.json()['display_date']
+    try:
+        cursor.execute('INSERT INTO zhihudaily VALUES (?, ?, ?, ?)',
+                        (1, date, json_news, display_date))
+        database.commit()
+    except sqlite3.IntegrityError:  # if the record has been stored before
+        pass
+    except Exception as error:
+        print error
+
+
+def init_database(database):
+    """Get all the news from 2013.05.19 to yestoday and save to database"""
+    cursor = database.cursor()
+    cursor.execute('CREATE TABLE zhihudaily (id integer ,'
+                                            'date integer primary key,'
+                                            'json_news varchar,'
+                                            'display_date varchar)'
+    )
     today = datetime.date.today()
     birthday = datetime.date(2013, 5, 20)  # zhihudaily's birthday is 20130519
     delta = (today - birthday).days
     print 'There are {0} records to be fatched.'.format(delta)
-    for i in range(-1, delta):  # the first time I need to create the table
-        if i % 10 == 0:
-            print '\rcollect {0} records'.format(i),
-            sys.stdout.flush()
+    for i in range(delta):
         date = (today - datetime.timedelta(i)).strftime("%Y%m%d")
         r = session.get(
             'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date))
-        date = int(r.json()['date'])
-        json_news = json.dumps(r.json()['news'])
-        display_date = r.json()['display_date']
-        try:
-            cursor.execute('INSERT INTO zhihudaily VALUES (?, ?, ?, ?)',
-                           (i, date, json_news, display_date))
-            db.commit()
-        except sqlite3.IntegrityError:  # if the record has been stored before
-            pass
-        except sqlite3.OperationalError:
-            cursor.execute('CREATE TABLE zhihudaily (id integer,\
-                                                     date integer primary key,\
-                                                     json_news varchar,\
-                                                     display_date varchar)'
-            )
-        except Exception as error:
-            print error
+        save(database, r)
+        print '\rcollect {0} records'.format(i+1),
+        sys.stdout.flush()
+    database.close()
+
+
+def daily_update(database):
+    """Fetch yestoday's news and save to database"""
+    today = datetime.date.today().strftime("%Y%m%d")
+    r = session.get(
+        'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(today))
+    save(database, r)
+    database.close()
 
 
 if __name__ == '__main__':
-    init_database()
-
-
-
+    database_path = path.dirname(path.abspath(__file__)) + '/zhihudaily.db'
+    if not path.exists(database_path):
+        print 'Start to init the database...'
+        database = sqlite3.connect(database_path)
+        init_database(database)
+    else:
+        print "Add yestoday's news to database."
+        database = sqlite3.connect(database_path)
+        daily_update(database)
