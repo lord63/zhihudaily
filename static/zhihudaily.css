@@ -27,7 +27,6 @@ body {
     margin-top: -20px;
 }
 
-
 .web-logo {
     background-image: url("/static/Web_Logo.png");
     background-repeat: no-repeat;
@@ -37,6 +36,20 @@ body {
     width: 126px;
     margin-top: 8px;
     margin-left: 8px;
+}
+
+.choose {
+    margin-top: 8px;
+    margin-right: 8px;
+    float: right;
+}
+
+.choose a {
+    color: #efefef;
+}
+
+.choose > .nav > li > a:hover {
+    background-color: #00beff;
 }
 
 .news_content {
