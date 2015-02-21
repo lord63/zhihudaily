@@ -86,3 +86,19 @@ nav {
     text-align: center;
     clear: both;
 }
+
+.footer {
+    color: #cccccc;
+    margin: 10px auto;
+    text-align: center;
+}
+
+.footer a {
+    color: #cccccc;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: #888888;
+    text-decoration: underline;
+}
