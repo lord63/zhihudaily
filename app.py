@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from math import ceil
 import json
 import datetime
 import os
@@ -16,6 +15,7 @@ SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+
 
 db = os.path.dirname(os.path.abspath(__file__)) + '/zhihudaily.db'
 database = SqliteDatabase(db)
@@ -119,13 +119,13 @@ def pages(page=1):
     date = r.json()["date"]
     news_list = [item for item in r.json()['news']]
     request.environ['Referer'] = 'http://daily.zhihu.com/'
-    news = Zhihudaily.select().order_by(Zhihudaily.date.desc()).paginate(page, 7)
+    news = Zhihudaily.select().order_by(Zhihudaily.date.desc()).paginate(page, 4)
     records = []
     for i in news:
         temp = json.loads(i.json_news)
         records.append({"date": i.date, "news": temp,
                         "display_date": i.display_date})
-    pagination = Pagination(page=page, total=Zhihudaily.select().count(), per_page=7,
+    pagination = Pagination(page=page, total=Zhihudaily.select().count(), per_page=4,
                             inner_window=7, outer_window=3, css_framework='bootstrap3')
     return render_template('pages.html', lists=news_list,
                            display_date=display_date, date=date,
