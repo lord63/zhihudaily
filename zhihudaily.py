@@ -4,11 +4,14 @@
 import json
 import datetime
 import os
+import re
+from StringIO import StringIO
 
 import requests
-from flask import Flask, render_template, request, g, redirect, url_for
+from flask import Flask, render_template, request, g, redirect, url_for, send_file
 from flask.ext.paginate import Pagination
 from peewee import *
+import redis
 
 
 SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
@@ -96,7 +99,9 @@ def with_image():
     display_date = r.json()['display_date']
     date = r.json()["date"]
     news_list = [item for item in r.json()['news']]
-    request.environ['Referer'] = 'http://daily.zhihu.com/'
+    for news in news_list:
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image']).groups()
+        news['image'] = 'http://zhihudaily.lord63.com/img/{0}/{1}'.format(items[0], items[1])
     return render_template('with_image.html', lists=news_list,
                            display_date=display_date, date=date,
                            is_today=True)
@@ -124,6 +129,22 @@ def pages(page=1):
                            display_date=display_date, date=date,
                            page=page, records=records,
                            pagination=pagination)
+
+
+@app.route('/img/<server>/<hash>')
+def image(server, hash):
+    image_url = 'http://{0}.zhimg.com/{1}'.format(server, hash)
+    r = redis.StrictRedis(host='localhost', port=6379)
+    cached = r.get(image_url)
+    if cached:
+        buffer_image = StringIO(cached)
+        buffer_image.seek(0)
+    else:
+        response = session.get(image_url)
+        buffer_image = StringIO(response.content)
+        buffer_image.seek(0)
+        r.setex(image_url, (60*60*24*7), buffer_image.getvalue())
+    return send_file(buffer_image, mimetype='image/jpeg')
 
 
 if __name__ == '__main__':
