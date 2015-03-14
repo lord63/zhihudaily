@@ -19,6 +19,9 @@ app.config.from_object(__name__)
 
 db = os.path.dirname(os.path.abspath(__file__)) + '/zhihudaily.db'
 database = SqliteDatabase(db)
+session = requests.Session()
+session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
+                        x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
 
 
 class BaseModel(Model):
@@ -51,9 +54,6 @@ def after_request(response):
 
 @app.route('/before/<date>')
 def before(date):
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
     r = session.get(
         'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date))
     display_date = r.json()['display_date']
@@ -81,9 +81,6 @@ def before(date):
 
 @app.route('/')
 def index():
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
     r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
     display_date = r.json()['display_date']
     date = r.json()['date']
@@ -95,9 +92,6 @@ def index():
 
 @app.route('/withimage')
 def with_image():
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
     r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
     display_date = r.json()['display_date']
     date = r.json()["date"]
@@ -111,22 +105,21 @@ def with_image():
 @app.route('/pages')
 @app.route('/pages/<int:page>')
 def pages(page=1):
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
     r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
     display_date = r.json()['display_date']
     date = r.json()["date"]
     news_list = [item for item in r.json()['news']]
     request.environ['Referer'] = 'http://daily.zhihu.com/'
-    news = Zhihudaily.select().order_by(Zhihudaily.date.desc()).paginate(page, 4)
+    news = Zhihudaily.select().order_by(
+        Zhihudaily.date.desc()).paginate(page, 4)
     records = []
     for i in news:
         temp = json.loads(i.json_news)
         records.append({"date": i.date, "news": temp,
                         "display_date": i.display_date})
-    pagination = Pagination(page=page, total=Zhihudaily.select().count(), per_page=4,
-                            inner_window=7, outer_window=3, css_framework='bootstrap3')
+    pagination = Pagination(page=page, total=Zhihudaily.select().count(),
+                            per_page=4, inner_window=7, outer_window=3,
+                            css_framework='bootstrap3')
     return render_template('pages.html', lists=news_list,
                            display_date=display_date, date=date,
                            page=page, records=records,
