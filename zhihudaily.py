@@ -7,10 +7,11 @@ import os
 import re
 from StringIO import StringIO
 
-import requests
-from flask import (Flask, render_template, request, g, redirect, url_for,
-                   send_file)
+
+from flask import (Flask, render_template, request, g, redirect,
+                   url_for, send_file)
 from flask.ext.paginate import Pagination
+import requests
 from peewee import *
 import redis
 
@@ -54,9 +55,15 @@ def get_news_info(response):
 
 
 def handle_image(news_list):
+    """Point all the images to my server, because use zhihudaily's
+    images directly may get 403 error.
+    """
     for news in news_list:
-        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image']).groups()
-        news['image'] = 'http://zhihudaily.lord63.com/img/{0}/{1}'.format(items[0], items[1])
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$',
+                          news['image']).groups()
+        news['image'] = (
+            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(
+                items[0], items[1]))
     return news_list
 
 
@@ -74,6 +81,7 @@ def after_request(response):
 
 @app.route('/before/<date>')
 def before(date):
+    """For 文字 UI and 图片 UI, before today."""
     r = make_request(
         'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date))
     (display_date, strdate, news_list) = get_news_info(r)
@@ -100,6 +108,7 @@ def before(date):
 
 @app.route('/')
 def index():
+    """The index page, for 文字 UI."""
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
     (display_date, date, news_list) = get_news_info(r)
     return render_template("index.html", lists=news_list,
@@ -109,6 +118,7 @@ def index():
 
 @app.route('/withimage')
 def with_image():
+    """The page for 图片 UI."""
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
     (display_date, date, news_list) = get_news_info(r)
     news_list = handle_image(news_list)
@@ -120,6 +130,7 @@ def with_image():
 @app.route('/pages')
 @app.route('/pages/<int:page>')
 def pages(page=1):
+    """The page the 分页 UI."""
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
     (display_date, date, news_list) = get_news_info(r)
     news_list = handle_image(news_list)
@@ -141,6 +152,7 @@ def pages(page=1):
 
 @app.route('/img/<server>/<hash_string>')
 def image(server, hash_string):
+    """Handle image, use redis to cache image."""
     image_url = 'http://{0}.zhimg.com/{1}'.format(server, hash_string)
     redis_server = redis.StrictRedis(host='localhost', port=6379)
     cached = redis_server.get(image_url)
