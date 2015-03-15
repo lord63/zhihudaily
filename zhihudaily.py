@@ -53,6 +53,13 @@ def get_news_info(response):
     return display_date, date, news_list
 
 
+def handle_image(news_list):
+    for news in news_list:
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image']).groups()
+        news['image'] = 'http://zhihudaily.lord63.com/img/{0}/{1}'.format(items[0], items[1])
+    return news_list
+
+
 @app.before_request
 def before_request():
     g.db = database
@@ -80,6 +87,7 @@ def before(date):
         else:
             return redirect(url_for('index'))
     is_today = r.json().get('is_today', False)
+    news_list = handle_image(news_list)
     if request.args['image'] == 'True':
         return render_template('with_image.html', lists=news_list,
                                display_date=display_date, date=strdate,
@@ -103,9 +111,7 @@ def index():
 def with_image():
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
     (display_date, date, news_list) = get_news_info(r)
-    for news in news_list:
-        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image']).groups()
-        news['image'] = 'http://zhihudaily.lord63.com/img/{0}/{1}'.format(items[0], items[1])
+    news_list = handle_image(news_list)
     return render_template('with_image.html', lists=news_list,
                            display_date=display_date, date=date,
                            is_today=True)
@@ -116,6 +122,7 @@ def with_image():
 def pages(page=1):
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
     (display_date, date, news_list) = get_news_info(r)
+    news_list = handle_image(news_list)
     news = Zhihudaily.select().order_by(
         Zhihudaily.date.desc()).paginate(page, 4)
     records = []
