@@ -4,24 +4,23 @@
 import json
 import datetime
 import os
+import re
+from StringIO import StringIO
 
-import requests
-from flask import Flask, render_template, request, g, redirect, url_for
+
+from flask import (Flask, render_template, request, g, redirect,
+                   url_for, send_file)
 from flask.ext.paginate import Pagination
+import requests
 from peewee import *
+import redis
 
-
-SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-
-
 db = os.path.dirname(os.path.abspath(__file__)) + '/zhihudaily.db'
 database = SqliteDatabase(db)
-session = requests.Session()
-session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                        x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
+SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
 
 
 class BaseModel(Model):
@@ -40,6 +39,34 @@ def create_tables():
     database.create_tables([Zhihudaily])
 
 
+def make_request(url):
+    session = requests.Session()
+    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
+                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
+    r = session.get(url)
+    return r
+
+
+def get_news_info(response):
+    display_date = response.json()['display_date']
+    date = response.json()['date']
+    news_list = [item for item in response.json()['news']]
+    return display_date, date, news_list
+
+
+def handle_image(news_list):
+    """Point all the images to my server, because use zhihudaily's
+    images directly may get 403 error.
+    """
+    for news in news_list:
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$',
+                          news['image']).groups()
+        news['image'] = (
+            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(
+                items[0], items[1]))
+    return news_list
+
+
 @app.before_request
 def before_request():
     g.db = database
@@ -54,11 +81,11 @@ def after_request(response):
 
 @app.route('/before/<date>')
 def before(date):
-    r = session.get(
+    """For 文字 UI and 图片 UI, before today."""
+    r = make_request(
         'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date))
-    display_date = r.json()['display_date']
+    (display_date, strdate, news_list) = get_news_info(r)
     today = datetime.date.today().strftime('%Y%m%d')
-    strdate = r.json()["date"]
     day_after = (
         datetime.datetime.strptime(date, '%Y%m%d') + datetime.timedelta(1)
     ).strftime('%Y%m%d')
@@ -68,7 +95,7 @@ def before(date):
         else:
             return redirect(url_for('index'))
     is_today = r.json().get('is_today', False)
-    news_list = [item for item in r.json()['news']]
+    news_list = handle_image(news_list)
     if request.args['image'] == 'True':
         return render_template('with_image.html', lists=news_list,
                                display_date=display_date, date=strdate,
@@ -81,10 +108,9 @@ def before(date):
 
 @app.route('/')
 def index():
-    r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
-    display_date = r.json()['display_date']
-    date = r.json()['date']
-    news_list = [item for item in r.json()['news']]
+    """The index page, for 文字 UI."""
+    r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
+    (display_date, date, news_list) = get_news_info(r)
     return render_template("index.html", lists=news_list,
                            display_date=display_date, date=date,
                            is_today=True)
@@ -92,11 +118,10 @@ def index():
 
 @app.route('/withimage')
 def with_image():
-    r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
-    display_date = r.json()['display_date']
-    date = r.json()["date"]
-    news_list = [item for item in r.json()['news']]
-    request.environ['Referer'] = 'http://daily.zhihu.com/'
+    """The page for 图片 UI."""
+    r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
+    (display_date, date, news_list) = get_news_info(r)
+    news_list = handle_image(news_list)
     return render_template('with_image.html', lists=news_list,
                            display_date=display_date, date=date,
                            is_today=True)
@@ -105,17 +130,16 @@ def with_image():
 @app.route('/pages')
 @app.route('/pages/<int:page>')
 def pages(page=1):
-    r = session.get('http://news.at.zhihu.com/api/1.2/news/latest')
-    display_date = r.json()['display_date']
-    date = r.json()["date"]
-    news_list = [item for item in r.json()['news']]
-    request.environ['Referer'] = 'http://daily.zhihu.com/'
+    """The page the 分页 UI."""
+    r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
+    (display_date, date, news_list) = get_news_info(r)
+    news_list = handle_image(news_list)
     news = Zhihudaily.select().order_by(
         Zhihudaily.date.desc()).paginate(page, 4)
     records = []
     for i in news:
-        temp = json.loads(i.json_news)
-        records.append({"date": i.date, "news": temp,
+        news = handle_image(json.loads(i.json_news))
+        records.append({"date": i.date, "news": news,
                         "display_date": i.display_date})
     pagination = Pagination(page=page, total=Zhihudaily.select().count(),
                             per_page=4, inner_window=7, outer_window=3,
@@ -124,6 +148,23 @@ def pages(page=1):
                            display_date=display_date, date=date,
                            page=page, records=records,
                            pagination=pagination)
+
+
+@app.route('/img/<server>/<hash_string>')
+def image(server, hash_string):
+    """Handle image, use redis to cache image."""
+    image_url = 'http://{0}.zhimg.com/{1}'.format(server, hash_string)
+    redis_server = redis.StrictRedis(host='localhost', port=6379)
+    cached = redis_server.get(image_url)
+    if cached:
+        buffer_image = StringIO(cached)
+        buffer_image.seek(0)
+    else:
+        r = make_request(image_url)
+        buffer_image = StringIO(r.content)
+        buffer_image.seek(0)
+        redis_server.setex(image_url, (60*60*24*7), buffer_image.getvalue())
+    return send_file(buffer_image, mimetype='image/jpeg')
 
 
 if __name__ == '__main__':
