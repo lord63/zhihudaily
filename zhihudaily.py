@@ -138,8 +138,8 @@ def pages(page=1):
         Zhihudaily.date.desc()).paginate(page, 4)
     records = []
     for i in news:
-        temp = json.loads(i.json_news)
-        records.append({"date": i.date, "news": temp,
+        news = handle_image(json.loads(i.json_news))
+        records.append({"date": i.date, "news": news,
                         "display_date": i.display_date})
     pagination = Pagination(page=page, total=Zhihudaily.select().count(),
                             per_page=4, inner_window=7, outer_window=3,
