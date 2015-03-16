@@ -102,3 +102,38 @@ nav {
     color: #888888;
     text-decoration: underline;
 }
+
+.stroll-list ul {
+  position: relative;
+  width: 230px;
+  height: 480px;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  list-style: none;
+
+  -webkit-perspective: 400px;
+     -moz-perspective: 400px;
+      -ms-perspective: 400px;
+       -o-perspective: 400px;
+          perspective: 400px;
+}
+
+.stroll-list ul li {
+  position: relative;
+  padding: 16px;
+  background: #eee;
+  color: #252525;
+  font-size: 18px;
+  z-index: 2;
+  -webkit-transform: translateZ(0px);
+     -moz-transform: translateZ(0px);
+      -ms-transform: translateZ(0px);
+       -o-transform: translateZ(0px);
+          transform: translateZ(0px);
+}
+
+.stroll-list ul li:nth-child(odd) {
+  background: #fff;
+}

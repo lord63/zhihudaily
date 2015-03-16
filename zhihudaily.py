@@ -150,6 +150,10 @@ def pages(page=1):
                            pagination=pagination)
 
 
+@app.route('/three-columns')
+def three_columns():
+    return render_template('three_columns.html')
+
 @app.route('/img/<server>/<hash_string>')
 def image(server, hash_string):
     """Handle image, use redis to cache image."""
