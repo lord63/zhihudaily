@@ -9,7 +9,7 @@ from StringIO import StringIO
 
 
 from flask import (Flask, render_template, request, g, redirect,
-                   url_for, send_file)
+                   url_for, send_file, jsonify)
 from flask.ext.paginate import Pagination
 import requests
 from peewee import *
@@ -152,7 +152,22 @@ def pages(page=1):
 
 @app.route('/three-columns')
 def three_columns():
-    return render_template('three_columns.html')
+    today = int(datetime.date.today().strftime('%Y%m%d'))
+    return render_template('three_columns.html', today=today)
+
+
+@app.route('/three-columns/<date>')
+def show_titles(date):
+    today = datetime.date.today().strftime('%Y%m%d')
+    if today == date:
+        r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
+        titles = [item['title'] for item in r.json()['news']]
+    else:
+        the_day = Zhihudaily.get(Zhihudaily.date == int(date))
+        news = json.loads(the_day.json_news)
+        titles = [item['title'] for item in news]
+    return jsonify(titles=titles)
+
 
 @app.route('/img/<server>/<hash_string>')
 def image(server, hash_string):
