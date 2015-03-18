@@ -2,15 +2,15 @@
 {% block body %}
 <div class="container stroll-list">
 
-  <div class="col-md-3">
+  <div class="col-md-2">
     <ul class="wave three-column-day">
-      {% for i in range(10) %}
+      {% for i in range(16) %}
       <li><a href="/three-columns/{{ today - i }}">{{ today - i }}</a></li>
       {% endfor %}
     </ul>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-4">
       <ul class="wave three-column-title"></ul>
   </div>
 

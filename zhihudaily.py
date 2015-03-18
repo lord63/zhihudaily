@@ -161,12 +161,12 @@ def show_titles(date):
     today = datetime.date.today().strftime('%Y%m%d')
     if today == date:
         r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
-        titles = [item['title'] for item in r.json()['news']]
+        news = [{'title':item['title'], 'url': item['share_url']} for item in r.json()['news']]
     else:
         the_day = Zhihudaily.get(Zhihudaily.date == int(date))
-        news = json.loads(the_day.json_news)
-        titles = [item['title'] for item in news]
-    return jsonify(titles=titles)
+        json_news = json.loads(the_day.json_news)
+        news = [{'title':item['title'], 'url': item['share_url']} for item in json_news]
+    return jsonify(news=news)
 
 
 @app.route('/img/<server>/<hash_string>')
