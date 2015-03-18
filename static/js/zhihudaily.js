@@ -7,4 +7,5 @@ $('.three-column-day li a').on('click', function(event) {
       $('.three-column-title').append('<li>' + titles[i] + '</li>');
     }
   });
+  $('.three-column-title').animate({scrollTop: 0}, 1000);
 });
