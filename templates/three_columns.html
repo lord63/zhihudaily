@@ -3,9 +3,9 @@
 <div class="container stroll-list">
 
   <div class="col-md-3">
-    <ul class="wave">
+    <ul class="wave three-column-day">
       {% for i in range(10) %}
-      <li><a href="/three-columns/{{ today - i }}" class="three-column-day">{{ today - i }}</a></li>
+      <li><a href="/three-columns/{{ today - i }}">{{ today - i }}</a></li>
       {% endfor %}
     </ul>
   </div>
@@ -37,6 +37,8 @@
   </div>
 
 </div>
+<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
 <script src="{{ url_for('static', filename='js/stroll.min.js') }}"></script>
 <script>stroll.bind( '.stroll-list ul' );</script>
 {% endblock %}
