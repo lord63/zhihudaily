@@ -7,7 +7,6 @@ import os
 import re
 from StringIO import StringIO
 
-
 from flask import (Flask, render_template, request, g, redirect,
                    url_for, send_file, jsonify)
 from flask.ext.paginate import Pagination
@@ -167,6 +166,16 @@ def show_titles(date):
         json_news = json.loads(the_day.json_news)
         news = [{'title':item['title'], 'url': item['share_url']} for item in json_news]
     return jsonify(news=news)
+
+
+@app.route('/three-columns/append-date/<date>')
+def append_date(date):
+    date_obj = datetime.datetime.strptime(date, '%Y%m%d').date()
+    append_list = []
+    for i in range(1, 16):
+        to_be_appended = (date_obj - datetime.timedelta(i)).strftime('%Y%m%d')
+        append_list.append(to_be_appended)
+    return jsonify(append_list=append_list)
 
 
 @app.route('/img/<server>/<hash_string>')

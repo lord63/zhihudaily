@@ -15,29 +15,13 @@
   </div>
 
   <div class="col-md-6">
-      <ul class="wave">
-      <li>one</li>
-      <li>Two</li>
-      <li>Three</li>
-      <li>Four</li>
-      <li>Five</li>
-      <li>Six</li>
-      <li>Seven</li>
-      <li>Eight</li>
-      <li>Nine</li>
-      <li>Ten</li>
-      <li>Eleven</li>
-      <li>Twelve</li>
-      <li>Thirteen</li>
-      <li>Fourteen</li>
-      <li>Fifteen</li>
-      <li>Sixteen</li>
-      </ul>
+    <div class="three-column-content"></div>
   </div>
 
 </div>
 <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
 <script src="{{ url_for('static', filename='js/stroll.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.infinitescroll.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
 <script>stroll.bind( '.stroll-list ul' );</script>
 {% endblock %}
