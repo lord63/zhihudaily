@@ -1,5 +1,5 @@
 // Click the date and show the news titles.
-$('.three-column-day li a').on('click', function(event) {
+$('.three-column-day').on('click', 'a.days', function(event) {
   event.preventDefault();
   $.getJSON($(this).attr('href'), function(resp) {
     $('.three-column-title li').remove();
@@ -43,7 +43,7 @@ $('.three-column-day').on('scroll', function(elem){
         dataType: 'json',
         success: function(resp){
           resp.append_list.map(function(date) {
-            $('.three-column-day').append("<li class=''><a href='/three-columns/" + date + "'>" + date + "</a></li>");
+            $('.three-column-day').append("<li><a href='/three-columns/" + date + "' class='days'>" + date + "</a></li>");
           });
         }
       });
