@@ -1,4 +1,10 @@
+// For the scroll effects.
+stroll.bind('.stroll-list ul', {live: true});
+
+
 // Click the date and show the news titles.
+// Event binding on dynamically elements：
+// http://stackoverflow.com/a/6658774 and http://stackoverflow.com/a/1207393
 $('.three-column-day').on('click', 'a.days', function(event) {
   event.preventDefault();
   $.getJSON($(this).attr('href'), function(resp) {
@@ -23,7 +29,7 @@ $('.three-column-day').on('click', 'a.days', function(event) {
 
 // Infinite scroll for the first column.
 $('.three-column-day').on('scroll', function(elem){
-    // http://stackoverflow.com/a/6271466
+    // Detecting when user scrolls to bottom: http://stackoverflow.com/a/6271466
     if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
       var last = $('.three-column-day li:last a').eq(0).html();
       $.ajax('/three-columns/append-date/' + last, {

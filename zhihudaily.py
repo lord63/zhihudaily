@@ -151,12 +151,14 @@ def pages(page=1):
 
 @app.route('/three-columns')
 def three_columns():
+    """The page for 三栏 UI"""
     today = int(datetime.date.today().strftime('%Y%m%d'))
     return render_template('three_columns.html', today=today)
 
 
 @app.route('/three-columns/<date>')
 def show_titles(date):
+    """Get titles via AJAX."""
     today = datetime.date.today().strftime('%Y%m%d')
     if today == date:
         r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
@@ -170,6 +172,7 @@ def show_titles(date):
 
 @app.route('/three-columns/append-date/<date>')
 def append_date(date):
+    """Append dates when scroll to bottom via AJAX"""
     date_obj = datetime.datetime.strptime(date, '%Y%m%d').date()
     append_list = []
     for i in range(1, 16):
