@@ -22,23 +22,9 @@ $('.three-column-day').on('click', 'a.days', function(event) {
 
 
 // Infinite scroll for the first column.
-// http://dumpk.com/2013/06/02/how-to-create-infinite-scroll-with-ajax-on-jquery/
-function element_in_scroll(elem)
-{
-    var docViewTop = $('.three-column-day').scrollTop();
-    var docViewBottom = docViewTop + $('.three-column-day').height();
-
-    var elemTop = $(elem).offset().top;
-    var elemBottom = elemTop + $(elem).height();
-
-    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-
-}
-
 $('.three-column-day').on('scroll', function(elem){
+    // http://stackoverflow.com/a/6271466
     if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-//    if (element_in_scroll(".three-column-day li:last")) {
-      $(this).unbind('scroll');
       var last = $('.three-column-day li:last a').eq(0).html();
       $.ajax('/three-columns/append-date/' + last, {
         type: 'GET',
@@ -49,7 +35,5 @@ $('.three-column-day').on('scroll', function(elem){
           });
         }
       });
-
     }
-//    $(this).bind('scroll');
 });
