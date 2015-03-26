@@ -32,10 +32,12 @@ function element_in_scroll(elem)
     var elemBottom = elemTop + $(elem).height();
 
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+
 }
 
 $('.three-column-day').on('scroll', function(elem){
-    if (element_in_scroll(".three-column-day li:last")) {
+    if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+//    if (element_in_scroll(".three-column-day li:last")) {
       $(this).unbind('scroll');
       var last = $('.three-column-day li:last a').eq(0).html();
       $.ajax('/three-columns/append-date/' + last, {
@@ -47,5 +49,7 @@ $('.three-column-day').on('scroll', function(elem){
           });
         }
       });
+
     }
+//    $(this).bind('scroll');
 });
