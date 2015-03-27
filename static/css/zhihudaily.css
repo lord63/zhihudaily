@@ -38,6 +38,7 @@ body {
     margin-left: 8px;
 }
 
+/* 全局顶部右上方的 UI 选择*/
 .choose {
     margin-top: 8px;
     margin-right: 8px;
@@ -52,6 +53,7 @@ body {
     background-color: #00beff;
 }
 
+/* 图片 UI 和分页 UI 中某一天的显示 */
 .news_content {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -62,6 +64,7 @@ body {
     clear: both;
 }
 
+/* 图片 UI 和分页 UI 中的每一天的新闻标题的显示（在图片上）*/
 .title {
     color: #fff;
     font-size: 16px;
@@ -74,19 +77,23 @@ body {
     width: 300px;
 }
 
+/* 图片 UI 和分页 UI 中 div 的控制（图片+标题） */
 .col-md-3 {
     padding: 0 15px 15px 0;
 }
 
+/* 文字 UI 和图片 UI 底部前后一天导航的控制 */
 nav {
     clear: both;
 }
 
+/* 分页 UI 底部的导航 */
 .paginate {
     text-align: center;
     clear: both;
 }
 
+/* 全局的 footer */
 .footer {
     color: #cccccc;
     margin: 10px auto;
@@ -103,6 +110,7 @@ nav {
     text-decoration: underline;
 }
 
+/* 三栏 UI 第一第二栏的滚动 */
 .stroll-list ul {
   position: relative;
   /*width: 230px;*/
@@ -141,4 +149,9 @@ nav {
 .stroll-list div {
   padding-left: 0;
   padding-right: 0;
+}
+
+/* 三栏 UI 的第三栏-新闻内容的显示 */
+.three-column-content {
+  overflow: scroll;
 }
