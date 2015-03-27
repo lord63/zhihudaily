@@ -33,7 +33,8 @@ $('.three-column-day').on('click', 'a.days', function(event) {
     var length = news.length;
     var i = 0;
     for (var a = 0; a < length; a += 1) {
-      textToInsert[i++] = '<li><a href="http://news-at.zhihu.com/api/4/news/';
+//      textToInsert[i++] = '<li><a href="http://news-at.zhihu.com/api/4/news/';
+      textToInsert[i++] = '<li><a href="/three-columns/contents/';
       textToInsert[i++] = news[a]['id'];
       textToInsert[i++] = '" class="titles">';
       textToInsert[i++] = news[a]['title'];
@@ -48,9 +49,12 @@ $('.three-column-day').on('click', 'a.days', function(event) {
 // Click the title and show the content
 $('.three-column-title').on('click', 'a.titles', function(event) {
   event.preventDefault();
-    $.getJSON($(this).attr('href') + '?callback=?', function(resp) {
-//      $('.three-column-content div').remove();
-      $('.three-column-content').replaceWith(resp['body']);
+    $.ajax($(this).attr('href'), {
+        type: 'GET',
+        dataType: 'json',
+        success: function(resp){
+            $('.three-column-content div').replaceWith(resp['body']);
+        }
     });
-
+    $('.three-column-content').animate({scrollTop: 0}, 1000);
 });

@@ -153,5 +153,7 @@ nav {
 
 /* 三栏 UI 的第三栏-新闻内容的显示 */
 .three-column-content {
+  height: 480px;
   overflow: scroll;
+  margin-right: 10px;
 }

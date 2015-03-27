@@ -181,6 +181,12 @@ def append_date(date):
     return jsonify(append_list=append_list)
 
 
+@app.route('/three-columns/contents/<id>')
+def get_content(id):
+    r = make_request('http://news-at.zhihu.com/api/4/news/' + id)
+    return jsonify(body=r.json()['body'])
+
+
 @app.route('/img/<server>/<hash_string>')
 def image(server, hash_string):
     """Handle image, use redis to cache image."""

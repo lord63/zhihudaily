@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="container stroll-list">
-
+<div class="container">
+  <div class="stroll-list">
   <div class="col-md-2">
     <ul class="wave three-column-day">
       {% for i in range(16) %}
@@ -13,11 +13,11 @@
   <div class="col-md-4">
       <ul class="three-column-title"></ul>
   </div>
-
-  <div class="col-md-6">
-    <div class="three-column-content"></div>
   </div>
 
+  <div class="col-md-6">
+    <div class="three-column-content"><div></div></div>
+  </div>
 </div>
 <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='js/stroll.min.js') }}"></script>
