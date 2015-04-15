@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+<div class="container">
   <div class="news_content">
   <h3>{{ display_date }}</h3><hr/>
   {% for item in lists %}
@@ -25,4 +26,5 @@
     </ul>
     {% endif %}
   </nav>
+</div>
 {% endblock %}
