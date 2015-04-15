@@ -2,9 +2,10 @@
 <html lang="zh-CN">
   <head>
     <title>Zhihu Daily</title>
+    {% block head %}
     <link rel=stylesheet type=text/css href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/stroll.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/zhihudaily.css') }}">
+    {% endblock %}
   </head>
   <div class="global-header">
     <div class="main-wrap">
