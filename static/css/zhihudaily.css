@@ -113,19 +113,18 @@ nav {
 /* 三栏 UI 第一第二栏的滚动 */
 .stroll-list ul {
   position: relative;
-  /*width: 230px;*/
-  height: 480px;
+  height: 750px;   /*TODO choose a height or use another way*/
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   overflow-y: scroll;
   list-style: none;
 
-  -webkit-perspective: 400px;
-     -moz-perspective: 400px;
-      -ms-perspective: 400px;
-       -o-perspective: 400px;
-          perspective: 400px;
+  -webkit-perspective: 700px;
+     -moz-perspective: 700px;
+      -ms-perspective: 700px;
+       -o-perspective: 700px;
+          perspective: 700px;
 }
 
 .stroll-list ul li {
@@ -153,7 +152,7 @@ nav {
 
 /* 三栏 UI 的第三栏-新闻内容的显示 */
 .three-column-content {
-  height: 480px;
+  height: 750px;
   overflow: scroll;
   margin-right: 10px;
 }
