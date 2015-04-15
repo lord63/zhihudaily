@@ -152,8 +152,11 @@ def pages(page=1):
 @app.route('/three-columns')
 def three_columns():
     """The page for 三栏 UI"""
-    today = int(datetime.date.today().strftime('%Y%m%d'))
-    return render_template('three_columns.html', today=today)
+    today = datetime.date.today()
+    days = []
+    for i in range(20):
+        days.append((today - datetime.timedelta(i)).strftime('%Y%m%d'))
+    return render_template('three_columns.html', days=days)
 
 
 @app.route('/three-columns/<date>')

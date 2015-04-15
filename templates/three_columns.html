@@ -4,8 +4,8 @@
   <div class="stroll-list">
   <div class="col-md-2">
     <ul class="wave three-column-day">
-      {% for i in range(16) %}
-      <li><a href="/three-columns/{{ today - i }}" class="days">{{ today - i }}</a></li>
+      {% for day in days %}
+      <li><a href="/three-columns/{{ day }}" class="days">{{ day }}</a></li>
       {% endfor %}
     </ul>
   </div>
