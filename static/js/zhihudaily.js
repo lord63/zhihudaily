@@ -44,7 +44,7 @@ $('.three-column-day').on('click', 'a.days', function(event) {
 
 
 // Mark clicked days in the first column.
-$('.stroll-list').on('click', 'a.days', function() {
+$('.stroll-list').on('click', 'a', function() {
   $(this).css( "color", "#acacc6");
 });
 
