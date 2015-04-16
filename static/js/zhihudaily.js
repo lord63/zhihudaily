@@ -58,8 +58,8 @@ $('.three-column-title').on('click', 'a.titles', function(event) {
       success: function(resp){
           $('.three-column-content div:first').replaceWith(resp['body']);
       },
-      beforeSend: function() { $('.loading-animation').addClass("spinner") },
-      complete: function() { $('.loading-animation').removeClass("spinner") }
+      beforeSend: function() {$(".three-column-content").isLoading({text: "Loading", position: "overlay"});},
+      complete: function() {$(".three-column-content").isLoading( "hide" );}
     });
   $('.three-column-content').animate({scrollTop: 0}, 1000);
 });
