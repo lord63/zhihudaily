@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% block head %}
-  {{ super() }}
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/stroll.css') }}">
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/zhihu_news.css') }}">
+  {{ super() }}
 {% endblock %}
 {% block body %}
 <div class="container-fluid">
   <div class="stroll-list">
-  <div class="col-md-2">
-    <ul class="wave three-column-day">
-      {% for day in days %}
-      <li><a href="/three-columns/{{ day }}" class="days">{{ day }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
+    <div class="col-md-2">
+      <ul class="wave three-column-day">
+        {% for day in days %}
+        <li><a href="/three-columns/{{ day }}" class="days">{{ day }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
 
-  <div class="col-md-4">
+    <div class="col-md-4">
       <ul class="three-column-title"></ul>
-  </div>
+    </div>
   </div>
 
   <div class="col-md-6">

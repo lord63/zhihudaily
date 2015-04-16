@@ -53,6 +53,23 @@ body {
     background-color: #00beff;
 }
 
+/* 全局的 footer */
+.footer {
+    color: #cccccc;
+    margin: 10px auto;
+    text-align: center;
+}
+
+.footer a {
+    color: #cccccc;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: #888888;
+    text-decoration: underline;
+}
+
 /* 图片 UI 和分页 UI 中某一天的显示 */
 .news_content {
     padding-top: 20px;
@@ -91,23 +108,6 @@ nav {
 .paginate {
     text-align: center;
     clear: both;
-}
-
-/* 全局的 footer */
-.footer {
-    color: #cccccc;
-    margin: 10px auto;
-    text-align: center;
-}
-
-.footer a {
-    color: #cccccc;
-    text-decoration: none;
-}
-
-.footer a:hover {
-    color: #888888;
-    text-decoration: underline;
 }
 
 /* 三栏 UI 第一第二栏的滚动 */

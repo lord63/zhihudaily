@@ -45,8 +45,12 @@ $('.three-column-day').on('click', 'a.days', function(event) {
   $('.three-column-title').animate({scrollTop: 0}, 1000);
 });
 
+// Mark clicked days in the first column.
+$('.stroll-list').on('click', 'a.days', function() {
+    $(this).css( "color", "#acacc6");
+});
 
-// Click the title and show the content
+// Click the title and show the content.
 $('.three-column-title').on('click', 'a.titles', function(event) {
   event.preventDefault();
     $.ajax($(this).attr('href'), {
