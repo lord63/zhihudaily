@@ -2,21 +2,18 @@
 stroll.bind('.stroll-list ul', {live: true});
 
 
-// Infinite scroll for the first column.
-$('.three-column-day').on('scroll', function(elem){
-    // Detecting when user scrolls to bottom: http://stackoverflow.com/a/6271466
-    if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-      var last = $('.three-column-day li:last a').eq(0).html();
-      $.ajax('/three-columns/append-date/' + last, {
-        type: 'GET',
-        dataType: 'json',
-        success: function(resp){
-          resp.append_list.map(function(date) {
-            $('.three-column-day').append("<li><a href='/three-columns/" + date + "' class='days'>" + date + "</a></li>");
-          });
-        }
+// Click 'more' then append days.
+$('.load').on('click', function(){
+  var last = $('.three-column-day li a').eq(-1).html();
+  $.ajax('/three-columns/append-date/' + last, {
+    type: 'GET',
+    dataType: 'json',
+    success: function(resp){
+      resp.append_list.map(function(date) {
+        $('.load').before("<li><a href='/three-columns/" + date + "' class='days'>" + date + "</a></li>");
       });
     }
+  });
 });
 
 
