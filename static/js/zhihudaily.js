@@ -56,8 +56,10 @@ $('.three-column-title').on('click', 'a.titles', function(event) {
       type: 'GET',
       dataType: 'json',
       success: function(resp){
-          $('.three-column-content div').replaceWith(resp['body']);
-      }
+          $('.three-column-content div:first').replaceWith(resp['body']);
+      },
+      beforeSend: function() { $('.loading-animation').addClass("spinner") },
+      complete: function() { $('.loading-animation').removeClass("spinner") }
     });
   $('.three-column-content').animate({scrollTop: 0}, 1000);
 });
