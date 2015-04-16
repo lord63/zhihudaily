@@ -1,113 +1,113 @@
 body {
-    padding-bottom: 20px;
-    padding-top: 20px;
+  padding-bottom: 20px;
+  padding-top: 20px;
 }
 
 .container {
-    width: 1290px;
+  width: 1290px;
 }
 
 .header {
-    padding-right: 15px;
+  padding-right: 15px;
 }
 
 .header h3 {
-    line-height: 40px;
-    margin-bottom: 0;
-    margin-top: 0;
-    padding-bottom: 20px;
+  line-height: 40px;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-bottom: 20px;
 }
 
 .global-header {
-    background-color: #009dd7;
-    color: #fafcfe;
-    height: 60px;
-    top: 0;
-    width: 100%;
-    margin-top: -20px;
+  background-color: #009dd7;
+  color: #fafcfe;
+  height: 60px;
+  top: 0;
+  width: 100%;
+  margin-top: -20px;
 }
 
 .web-logo {
-    background-image: url("/static/Web_Logo.png");
-    background-repeat: no-repeat;
-    display: inline-block;
-    height: 42px;
-    vertical-align: middle;
-    width: 126px;
-    margin-top: 8px;
-    margin-left: 8px;
+  background-image: url("/static/Web_Logo.png");
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 42px;
+  vertical-align: middle;
+  width: 126px;
+  margin-top: 8px;
+  margin-left: 8px;
 }
 
 /* 全局顶部右上方的 UI 选择*/
 .choose {
-    margin-top: 8px;
-    margin-right: 8px;
-    float: right;
+  margin-top: 8px;
+  margin-right: 8px;
+  float: right;
 }
 
 .choose a {
-    color: #efefef;
+  color: #efefef;
 }
 
 .choose > .nav > li > a:hover {
-    background-color: #00beff;
+  background-color: #00beff;
 }
 
 /* 全局的 footer */
 .footer {
-    color: #cccccc;
-    margin: 10px auto;
-    text-align: center;
+  color: #cccccc;
+  margin: 10px auto;
+  text-align: center;
 }
 
 .footer a {
-    color: #cccccc;
-    text-decoration: none;
+  color: #cccccc;
+  text-decoration: none;
 }
 
 .footer a:hover {
-    color: #888888;
-    text-decoration: underline;
+  color: #888888;
+  text-decoration: underline;
 }
 
 /* 图片 UI 和分页 UI 中某一天的显示 */
 .news_content {
-    padding-top: 20px;
-    padding-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .news_content h3 {
-    margin-top: 0;
-    clear: both;
+  margin-top: 0;
+  clear: both;
 }
 
 /* 图片 UI 和分页 UI 中的每一天的新闻标题的显示（在图片上）*/
 .title {
-    color: #fff;
-    font-size: 16px;
-    margin-top: -50px;
-    margin-bottom: 0;
-    padding: 0 0 5px 5px;
-    background: rgba(0, 0, 0, 0.7);
-    position: relative;
-    height: 50px;
-    width: 300px;
+  color: #fff;
+  font-size: 16px;
+  margin-top: -50px;
+  margin-bottom: 0;
+  padding: 0 0 5px 5px;
+  background: rgba(0, 0, 0, 0.7);
+  position: relative;
+  height: 50px;
+  width: 300px;
 }
 
 /* 图片 UI 和分页 UI 中 div 的控制（图片+标题） */
 .col-md-3 {
-    padding: 0 15px 15px 0;
+  padding: 0 15px 15px 0;
 }
 
 /* 文字 UI 和图片 UI 底部前后一天导航的控制 */
 nav {
-    clear: both;
+  clear: both;
 }
 
 /* 分页 UI 底部的导航 */
 .paginate {
-    text-align: center;
-    clear: both;
+  text-align: center;
+  clear: both;
 }
 
 /* 三栏 UI 第一第二栏的滚动 */
@@ -121,10 +121,10 @@ nav {
   list-style: none;
 
   -webkit-perspective: 700px;
-     -moz-perspective: 700px;
-      -ms-perspective: 700px;
-       -o-perspective: 700px;
-          perspective: 700px;
+   -moz-perspective: 700px;
+  -ms-perspective: 700px;
+   -o-perspective: 700px;
+  perspective: 700px;
 }
 
 .stroll-list ul li {
@@ -135,10 +135,10 @@ nav {
   font-size: 18px;
   z-index: 2;
   -webkit-transform: translateZ(0px);
-     -moz-transform: translateZ(0px);
-      -ms-transform: translateZ(0px);
-       -o-transform: translateZ(0px);
-          transform: translateZ(0px);
+   -moz-transform: translateZ(0px);
+  -ms-transform: translateZ(0px);
+   -o-transform: translateZ(0px);
+  transform: translateZ(0px);
 }
 
 .stroll-list ul li:nth-child(odd) {
