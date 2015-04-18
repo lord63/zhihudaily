@@ -4,7 +4,8 @@ body {
 }
 
 .container {
-  width: 1290px;
+  /*width: 1290px;*/
+  width: 68%;
 }
 
 .header {
@@ -157,6 +158,13 @@ nav {
   margin-right: 10px;
 }
 
+/* 三栏 UI new content 去掉有右边的 padding */
+.container-fluid {
+    padding-right: 0px;
+}
+.container-fluid .col-md-6 {
+    padding-right: 0px;
+}
 
 /* CSS spinner animation */
 .isloading-wrapper.isloading-right {
