@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block head %}
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/stroll.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/zhihu_news.css') }}">
+  {{ super() }}
+{% endblock %}
+{% block body %}
+<div class="container-fluid">
+  <div class="stroll-list">
+    <div class="col-md-2">
+      <ul class="wave three-column-day">
+        {% for day in days %}
+        <li><a href="/three-columns/{{ day }}" class="days">{{ day }}</a></li>
+        {% endfor %}
+        <li class="load">Load More</li>
+      </ul>
+    </div>
+
+    <div class="col-md-4">
+      <ul class="three-column-title"></ul>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="three-column-content">
+      <div class="main-wrap content-wrap"></div>
+    </div>
+  </div>
+</div>
+<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/stroll.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.isloading.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
+{% endblock %}

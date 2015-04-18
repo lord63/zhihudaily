@@ -2,26 +2,27 @@
 <html lang="zh-CN">
   <head>
     <title>Zhihu Daily</title>
+    {% block head %}
     <link rel=stylesheet type=text/css href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='zhihudaily.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/zhihudaily.css') }}">
+    {% endblock %}
   </head>
   <div class="global-header">
     <div class="main-wrap">
       <a title="知乎日报" target="_self" href="/">
         <i class="web-logo"></i>
       </a>
-    <div class="choose">
-      <ul class="nav nav-pills">
-        <li role="presentation"><a href="{{ url_for('index') }}">文字 UI</a></li>
-        <li role="presentation"><a href="{{ url_for('with_image') }}">图片 UI</a></li>
-        <li role="presentation"><a href="{{ url_for('pages') }}">分页 UI</a></li>
-      </ul>
-    </div>
+      <div class="choose">
+        <ul class="nav nav-pills">
+          <li role="presentation"><a href="{{ url_for('index') }}">文字 UI</a></li>
+          <li role="presentation"><a href="{{ url_for('with_image') }}">图片 UI</a></li>
+          <li role="presentation"><a href="{{ url_for('pages') }}">分页 UI</a></li>
+          <li role="presentation"><a href="{{ url_for('three_columns') }}">三栏 UI</a></li>
+        </ul>
+      </div>
     </div>
   </div>
-  <div class="container">
   {% block body %}{% endblock %}
-  </div>
   <div class="footer">
     <p>With love made by lord63. Fork me on <a href="https://github.com/lord63/zhihudaily">github</a>.</p>
   </div>

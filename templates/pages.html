@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+<div class="container">
   {% if page == 1 %}
   <div class="news_content">
   <h3>{{ display_date }}</h3><hr/>
@@ -28,4 +29,5 @@
   </div>
   {% endfor %}
   <div class="paginate">{{ pagination.links }}</div>
+</div>
 {% endblock %}
