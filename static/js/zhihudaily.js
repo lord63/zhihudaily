@@ -56,7 +56,7 @@ $('.three-column-title').on('click', 'a.titles', function(event) {
       type: 'GET',
       dataType: 'json',
       success: function(resp){
-          $('.three-column-content div:first').replaceWith(resp['body']);
+          $('.three-column-content .main-wrap').replaceWith(resp['body']);
       },
       beforeSend: function() {$(".three-column-content").isLoading({text: "Loading", position: "overlay"});},
       complete: function() {$(".three-column-content").isLoading( "hide" );}
