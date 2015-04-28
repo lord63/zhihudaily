@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, unicode_literals
+
 import json
 import datetime
 import os
 import re
 from StringIO import StringIO
+from urlparse import urljoin
 
 from flask import (Flask, render_template, request, g, redirect,
                    url_for, send_file, jsonify)
 from flask.ext.paginate import Pagination
+from werkzeug.contrib.atom import AtomFeed
 import requests
 from peewee import *
 import redis
@@ -19,6 +23,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 db = os.path.dirname(os.path.abspath(__file__)) + '/zhihudaily.db'
 database = SqliteDatabase(db)
+redis_server = redis.StrictRedis(host='localhost', port=6379)
 SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
 
 
@@ -198,7 +203,6 @@ def get_content(id):
 def image(server, hash_string):
     """Handle image, use redis to cache image."""
     image_url = 'http://{0}.zhimg.com/{1}'.format(server, hash_string)
-    redis_server = redis.StrictRedis(host='localhost', port=6379)
     cached = redis_server.get(image_url)
     if cached:
         buffer_image = StringIO(cached)
@@ -209,6 +213,37 @@ def image(server, hash_string):
         buffer_image.seek(0)
         redis_server.setex(image_url, (60*60*24*7), buffer_image.getvalue())
     return send_file(buffer_image, mimetype='image/jpeg')
+
+
+@app.route('/feed')
+def generate_feed():
+    feed = AtomFeed('Zhihudaily',
+                    feed_url=request.url,
+                    url=request.url_root)
+    latest_url = 'http://news.at.zhihu.com/api/1.2/news/latest'
+    if redis_server.get(latest_url):
+        response_json = json.loads(redis_server.get(latest_url))
+        print("Debug: {0} cached".format(latest_url))
+    else:
+        response_json = make_request(latest_url).json()
+        redis_server.setex(latest_url, (60*60), json.dumps(json_news))
+        print("Debug: no {0}, fetch store it".format(latest_url))
+
+    articles = response_json['news']
+    for article in articles:
+        if redis_server.get(article['url']):
+            body = redis_server.get(article['url']).decode('utf-8')
+            print("Debug: {0} cached".format(article['title']))
+        else:
+            body = make_request(article['url']).json()['body']
+            redis_server.setex(article['url'], (60*60*24), body)
+            print("Debug: no {0}, fetch store it".format(article['title']))
+        feed.add(article['title'], body,
+                 content_type='html',
+                 author='zhihudaily',
+                 url=urljoin(request.url_root, article['url']),
+                 updated=datetime.datetime.now())
+    return feed.get_response()
 
 
 if __name__ == '__main__':
