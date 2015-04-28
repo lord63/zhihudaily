@@ -220,13 +220,19 @@ def generate_feed():
     feed = AtomFeed('Zhihudaily',
                     feed_url=request.url,
                     url=request.url_root)
-    # TODO: cache the latest news, expired after an hour.
-    r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
-    articles = r.json()['news']
+    latest_url = 'http://news.at.zhihu.com/api/1.2/news/latest'
+    if redis_server.get(latest_url):
+        response_json = json.loads(redis_server.get(latest_url))
+        print("Debug: {0} cached".format(latest_url))
+    else:
+        response_json = make_request(latest_url).json()
+        redis_server.setex(latest_url, (60*60), json.dumps(json_news))
+        print("Debug: no {0}, fetch store it".format(latest_url))
+
+    articles = response_json['news']
     for article in articles:
-        cached = redis_server.get(article['url'])
-        if cached:
-            body = cached.decode('utf-8')
+        if redis_server.get(article['url']):
+            body = redis_server.get(article['url']).decode('utf-8')
             print("Debug: {0} cached".format(article['title']))
         else:
             body = make_request(article['url']).json()['body']
