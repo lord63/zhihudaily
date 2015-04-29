@@ -226,7 +226,7 @@ def generate_feed():
         print("Debug: {0} cached".format(latest_url))
     else:
         response_json = make_request(latest_url).json()
-        redis_server.setex(latest_url, (60*60), json.dumps(json_news))
+        redis_server.setex(latest_url, (60*60), json.dumps(response_json))
         print("Debug: no {0}, fetch store it".format(latest_url))
 
     articles = response_json['news']
