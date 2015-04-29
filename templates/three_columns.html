@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/stroll.css') }}">
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/zhihu_news.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/lib/stroll.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/lib/zhihu_news.css') }}">
   {{ super() }}
 {% endblock %}
 {% block body %}
@@ -28,7 +28,7 @@
   </div>
 </div>
 <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/stroll.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery.isloading.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lib/stroll.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lib/jquery.isloading.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
 {% endblock %}
