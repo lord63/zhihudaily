@@ -6,14 +6,17 @@ from __future__ import absolute_import, unicode_literals
 import datetime
 import json
 
-from flask import render_template, jsonify
+from flask import render_template, jsonify, Blueprint
 
-from zhihudaily import app
 from zhihudaily.models import Zhihudaily
 from zhihudaily.utils import make_request
 
 
-@app.route('/three-columns')
+three_columns_ui = Blueprint('three_columns_ui', __name__,
+                             template_folder='templates')
+
+
+@three_columns_ui.route('/three-columns')
 def three_columns():
     """The page for 三栏 UI"""
     today = datetime.date.today()
@@ -23,7 +26,7 @@ def three_columns():
     return render_template('three_columns.html', days=days)
 
 
-@app.route('/three-columns/<date>')
+@three_columns_ui.route('/three-columns/<date>')
 def show_titles(date):
     """Get titles via AJAX."""
     today = datetime.date.today().strftime('%Y%m%d')
@@ -41,7 +44,7 @@ def show_titles(date):
     return jsonify(news=news)
 
 
-@app.route('/three-columns/append-date/<date>')
+@three_columns_ui.route('/three-columns/append-date/<date>')
 def append_date(date):
     """Append dates when scroll to bottom via AJAX"""
     date_obj = datetime.datetime.strptime(date, '%Y%m%d').date()
@@ -52,7 +55,7 @@ def append_date(date):
     return jsonify(append_list=append_list)
 
 
-@app.route('/three-columns/contents/<id>')
+@three_columns_ui.route('/three-columns/contents/<id>')
 def get_content(id):
     r = make_request('http://news-at.zhihu.com/api/4/news/' + id)
     return jsonify(body=r.json()['body'])
