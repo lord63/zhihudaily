@@ -5,16 +5,18 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 
-from flask import render_template
+from flask import render_template, Blueprint
 from flask.ext.paginate import Pagination
 
-from zhihudaily import app
 from zhihudaily.models import Zhihudaily
 from zhihudaily.utils import make_request, get_news_info, handle_image
 
 
-@app.route('/pages')
-@app.route('/pages/<int:page>')
+pages_ui = Blueprint('pages_ui', __name__, template_folder='templates')
+
+
+@pages_ui.route('/pages')
+@pages_ui.route('/pages/<int:page>')
 def pages(page=1):
     """The page the 分页 UI."""
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
