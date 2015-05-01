@@ -6,4 +6,4 @@ from __future__ import absolute_import, unicode_literals
 from zhihudaily import app
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

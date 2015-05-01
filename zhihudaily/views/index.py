@@ -35,9 +35,9 @@ def before(date):
     ).strftime('%Y%m%d')
     if int(today) < int(date):
         if request.args['image'] == 'True':
-            return redirect(url_for('with_image'))
+            return redirect(url_for('image_ui.with_image'))
         else:
-            return redirect(url_for('index'))
+            return redirect(url_for('text_ui.index'))
     is_today = r.json().get('is_today', False)
     news_list = handle_image(news_list)
     if request.args['image'] == 'True':

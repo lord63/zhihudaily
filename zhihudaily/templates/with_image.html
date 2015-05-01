@@ -15,13 +15,13 @@
   <nav>
     <ul class="nav nav-pills pull-left">
       <li role="presentation">
-        <a href="{{ url_for('before', date=date, image=True) }}"><<< Previous</a>
+        <a href="{{ url_for('text_ui.before', date=date, image=True) }}"><<< Previous</a>
       </li>
     </ul>
     {% if not is_today%}
     <ul class="nav nav-pills pull-right">
       <li role="presentation">
-        <a href="{{ url_for('before', date=day_after, image=True) }}">Next >>></a>
+        <a href="{{ url_for('text_ui.before', date=day_after, image=True) }}">Next >>></a>
       </li>
     </ul>
     {% endif %}
