@@ -8,13 +8,16 @@ import json
 from urlparse import urljoin
 
 from werkzeug.contrib.atom import AtomFeed
-from flask import request
+from flask import request, Blueprint
 
-from zhihudaily import app, redis_server
+from zhihudaily import redis_server
 from zhihudaily.utils import make_request
 
 
-@app.route('/feeds')
+feeds = Blueprint('feeds', __name__, template_folder='templates')
+
+
+@feeds.route('/feeds')
 def generate_feed():
     feed = AtomFeed('Zhihudaily',
                     feed_url=request.url,
