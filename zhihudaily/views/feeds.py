@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 
 import datetime
 import json
@@ -10,11 +10,13 @@ from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import request, Blueprint
 
-from zhihudaily import redis_server
+
 from zhihudaily.utils import make_request
+from zhihudaily.configs import Config
 
 
 feeds = Blueprint('feeds', __name__, template_folder='templates')
+redis_server = Config.redis_server
 
 
 @feeds.route('/feeds')

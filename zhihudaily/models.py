@@ -5,12 +5,12 @@ from __future__ import absolute_import, unicode_literals
 
 from peewee import Model, IntegerField, CharField
 
-from zhihudaily import database
+from zhihudaily.configs import Config
 
 
 class BaseModel(Model):
     class Meta:
-        database = database
+        database = Config.database
 
 
 class Zhihudaily(BaseModel):
