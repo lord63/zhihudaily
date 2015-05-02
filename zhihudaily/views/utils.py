@@ -14,13 +14,13 @@ from zhihudaily.utils import make_request
 utils = Blueprint('utils', __name__)
 
 
-@utils.before_request
+@utils.before_app_request
 def before_request():
     g.db = Config.database
     g.db.connect()
 
 
-@utils.after_request
+@utils.after_app_request
 def after_request(response):
     g.db.close()
     return response
