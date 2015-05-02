@@ -20,5 +20,3 @@ def with_image():
     return render_template('with_image.html', lists=news_list,
                            display_date=display_date, date=date,
                            is_today=True)
-
-
