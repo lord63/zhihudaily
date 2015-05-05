@@ -3,3 +3,4 @@ requests >= 2.5.1
 peewee >= 2.4.7
 flask-paginate >= 0.2.8
 redis >= 2.10.3
+Flask-Script >= 2.0.5
