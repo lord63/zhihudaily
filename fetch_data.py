@@ -23,7 +23,7 @@ def save(database, response):
     display_date = response.json()['display_date']
     try:
         cursor.execute('INSERT INTO zhihudaily VALUES (?, ?, ?, ?)',
-                        (1, date, json_news, display_date))
+                       (1, date, json_news, display_date))
         database.commit()
     except sqlite3.IntegrityError:  # if the record has been stored before
         pass
@@ -34,11 +34,11 @@ def save(database, response):
 def init_database(database):
     """Get all the news from 2013.05.19 to yestoday and save to database"""
     cursor = database.cursor()
-    cursor.execute('CREATE TABLE zhihudaily (id integer ,'
-                                            'date integer primary key,'
-                                            'json_news varchar,'
-                                            'display_date varchar)'
-    )
+    cursor.execute('CREATE TABLE zhihudaily ('
+                   'id integer ,'
+                   'date integer primary key,'
+                   'json_news varchar,'
+                   'display_date varchar)')
     today = datetime.date.today()
     birthday = datetime.date(2013, 5, 20)  # zhihudaily's birthday is 20130519
     delta = (today - birthday).days
@@ -63,7 +63,8 @@ def daily_update(database):
 
 
 if __name__ == '__main__':
-    database_path = path.dirname(path.abspath(__file__)) + '/zhihudaily.db'
+    database_path = path.join(path.dirname(path.abspath(__file__)),
+                              'zhihudaily/zhihudaily.db')
     if not path.exists(database_path):
         print 'Start to init the database...'
         database = sqlite3.connect(database_path)
