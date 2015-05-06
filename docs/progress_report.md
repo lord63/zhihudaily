@@ -1,8 +1,20 @@
+### 2015.04.29
+
+* 对于 zhihudaily 进行首次重构, 于 05.05 完成，详情见 <https://github.com/lord63/zhihudaily/pull/18>
+
+### 2015.04.28
+
+* 对于 feed 中今天的新闻进行缓存，feed support 完成
+
+### 2015.04.27
+
+* 开始搞 feed 的支持，基本能用
+
 ### 2015.04.18
 
 * 三栏 UI 完工
 
-### 2015.03.17-2015.03.17
+### 2015.03.17-2015.04.17
 
 * 三栏 UI 实现具体过程详见 <https://github.com/lord63/zhihudaily/pull/12>
 
