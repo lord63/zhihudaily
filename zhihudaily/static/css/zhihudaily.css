@@ -85,19 +85,19 @@ body {
 /* 图片 UI 和分页 UI 中的每一天的新闻标题的显示（在图片上）*/
 .title {
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   margin-top: -50px;
   margin-bottom: 0;
   padding: 0 0 5px 5px;
   background: rgba(0, 0, 0, 0.7);
   position: relative;
   height: 50px;
-  width: 300px;
+  width: 200px;
 }
 
 /* 图片 UI 和分页 UI 中 div 的控制（图片+标题） */
 .col-md-3 {
-  padding: 0 15px 15px 0;
+  padding: 0 15px 8px 0;
 }
 
 /* 文字 UI 和图片 UI 底部前后一天导航的控制 */
