@@ -27,21 +27,17 @@ def generate_feed():
     latest_url = 'http://news.at.zhihu.com/api/1.2/news/latest'
     if redis_server.get(latest_url):
         response_json = json.loads(redis_server.get(latest_url))
-        print("Debug: {0} cached".format(latest_url))
     else:
         response_json = make_request(latest_url).json()
         redis_server.setex(latest_url, (60*60), json.dumps(response_json))
-        print("Debug: no {0}, fetch store it".format(latest_url))
 
     articles = response_json['news']
     for article in articles:
         if redis_server.get(article['url']):
             body = redis_server.get(article['url']).decode('utf-8')
-            print("Debug: {0} cached".format(article['title']))
         else:
             body = make_request(article['url']).json()['body']
             redis_server.setex(article['url'], (60*60*24), body)
-            print("Debug: no {0}, fetch store it".format(article['title']))
         feed.add(article['title'], body,
                  content_type='html',
                  author='zhihudaily',
