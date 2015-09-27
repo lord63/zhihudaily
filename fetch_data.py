@@ -31,8 +31,8 @@ def save(database, response):
         print error
 
 
-def init_database(database):
-    """Get all the news from 2013.05.19 to yestoday and save to database"""
+def init_database(database, num):
+    """Fetch news and init the database"""
     cursor = database.cursor()
     cursor.execute('CREATE TABLE zhihudaily ('
                    'id integer ,'
@@ -40,8 +40,12 @@ def init_database(database):
                    'json_news varchar,'
                    'display_date varchar)')
     today = datetime.date.today()
-    birthday = datetime.date(2013, 5, 20)  # zhihudaily's birthday is 20130519
-    delta = (today - birthday).days
+    if num == 'all':
+        # zhihudaily's birthday is 20130519
+        birthday = datetime.date(2013, 5, 20)
+        delta = (today - birthday).days
+    else:
+        delta = int(num)
     print 'There are {0} records to be fatched.'.format(delta)
     for i in range(delta):
         date = (today - datetime.timedelta(i)).strftime("%Y%m%d")
@@ -66,9 +70,11 @@ if __name__ == '__main__':
     database_path = path.join(path.dirname(path.abspath(__file__)),
                               'zhihudaily/zhihudaily.db')
     if not path.exists(database_path):
+        sys.argv.append(10)  # The default num of days is 10.
+        num = sys.argv[1]
         print 'Start to init the database...'
         database = sqlite3.connect(database_path)
-        init_database(database)
+        init_database(database, num)
     else:
         print "Add yestoday's news to database."
         database = sqlite3.connect(database_path)
