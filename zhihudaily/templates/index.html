@@ -1,21 +1,17 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="container">
-  <div class="col-md-offset-3">
-  <ul>
-    <h3>{{ display_date }}</h3>
-    {% for item in lists %}
-    <h4><a href={{ item['share_url'] }}>{{ item['title'] }}</a></h4>
-    {% endfor %}
-  </ul>
-  </div>
-  <nav >
+  <h4 class="text-center">{{ display_date }}</h4>
+  {% for item in lists %}
+    <a href={{ item['share_url'] }}>{{ item['title'] }}</a>
+  {% endfor %}
+  <nav>
     <ul class="nav nav-pills pull-left">
       <li role="presentation">
         <a href="{{ url_for('text_ui.before', date=date, image=False) }}"><<< Previous</a>
       </li>
     </ul>
-    {% if not is_today%}
+    {% if not is_today %}
     <ul class="nav nav-pills pull-right">
       <li role="presentation">
         <a href="{{ url_for('text_ui.before', date=day_after, image=False) }}">Next >>></a>

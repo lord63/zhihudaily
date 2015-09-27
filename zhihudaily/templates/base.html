@@ -2,32 +2,42 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
+    <meta charset="utf-8">
     <title>Zhihu Daily</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/zhihudaily.css') }}">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     {% block head %}
-    <link rel=stylesheet type=text/css href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/zhihudaily.css') }}">
     {% endblock %}
   </head>
-  <div class="global-header">
-    <div class="main-wrap">
-      <a title="知乎日报" target="_self" href="/">
-        <i class="web-logo"></i>
-      </a>
-      <div class="choose">
-        <ul class="nav nav-pills">
-          {{ nav_link('text_ui.index', '文字 UI') }}
-          {{ nav_link('image_ui.with_image', '图片 UI') }}
-          {{ nav_link('pages_ui.pages', '分页 UI') }}
-          {{ nav_link('three_columns_ui.three_columns', '三栏 UI') }}
-          {{ nav_link('feeds.generate_feed', 'Feeds') }}
-        </ul>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" aria-controls="navbar" data-target="#hd-nav" data-toggle="collapse">
+            <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+          </button>
+          <h3 id="logo">知乎日报</h3>
+        </div>
+        <div id="hd-nav" class="navbar-collapse collapse" aria-expanded="false">
+          <ul class="nav navbar-nav navbar-right text-center">
+            {{ nav_link('text_ui.index', '文字 UI') }}
+            {{ nav_link('image_ui.with_image', '图片 UI') }}
+            {{ nav_link('pages_ui.pages', '分页 UI') }}
+            {{ nav_link('three_columns_ui.three_columns', '三栏 UI') }}
+            {{ nav_link('feeds.generate_feed', 'Feeds') }}
+          </ul>
+        </div>
       </div>
+    </nav>
+    {% block body %}{% endblock %}
+    <div class="container">
+      <footer class="text-right">
+        <p>—— With love made by lord63. Fork me on <a href="https://github.com/lord63/zhihudaily">Github</a>.</p>
+      </footer>
     </div>
-  </div>
-  {% block body %}{% endblock %}
-  <div class="footer">
-    <p>With love made by lord63. Fork me on <a href="https://github.com/lord63/zhihudaily">github</a>.</p>
-  </div>
+  </body>
 </html>
-
-
