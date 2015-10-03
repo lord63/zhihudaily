@@ -87,8 +87,11 @@ def check_integrity(database, date_range=10):
 
     missed_date = set(date_in_real) - set(date_in_db)
     for date in missed_date:
+        date_in_datetime = datetime.date(
+            *[date / 10000, date % 10000 / 100, date % 100])
+        date_ = (date_in_datetime + datetime.timedelta(1)).strftime("%Y%m%d")
         r = session.get(
-            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date+1))
+            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date_))
         print "fetching {0}...".format(date)
         save(database, r)
     database.close()
