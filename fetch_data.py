@@ -63,19 +63,46 @@ def daily_update(database):
     r = session.get(
         'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(today))
     save(database, r)
+    check_integrity(database, date_range=10)
+    database.close()
+
+
+def check_integrity(database, date_range=10):
+    """Check data integrity, make sure we won't miss a day"""
+    cursor = database.cursor()
+    date_in_db = []
+    for date in cursor.execute('SELECT date FROM zhihudaily'):
+        date_in_db.append(date[0])
+
+    today = datetime.date.today()
+    if date_range == 'all':
+        birthday = datetime.date(2013, 5, 20)
+        delta = (today - birthday).days
+    else:
+        delta = date_range
+    date_in_real = []
+    for i in range(1, delta+1):
+        date = (today - datetime.timedelta(i)).strftime("%Y%m%d")
+        date_in_real.insert(0, int(date))
+
+    missed_date = set(date_in_real) - set(date_in_db)
+    for date in missed_date:
+        r = session.get(
+            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date+1))
+        print "fetching {0}...".format(date)
+        save(database, r)
     database.close()
 
 
 if __name__ == '__main__':
     database_path = path.join(path.dirname(path.abspath(__file__)),
                               'zhihudaily/zhihudaily.db')
+    database = sqlite3.connect(database_path)
     if not path.exists(database_path):
         sys.argv.append(10)  # The default num of days is 10.
         num = sys.argv[1]
         print 'Start to init the database...'
-        database = sqlite3.connect(database_path)
         init_database(database, num)
     else:
         print "Add yestoday's news to database."
-        database = sqlite3.connect(database_path)
         daily_update(database)
