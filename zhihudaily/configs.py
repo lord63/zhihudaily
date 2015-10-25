@@ -17,7 +17,9 @@ class Config(object):
 
 class DevelopConfig(Config):
     DEBUG = True
+    CACHE_TYPE = 'simple'
 
 
 class ProductionConfig(Config):
     DEBUG = False
+    CACHE_TYPE = 'redis'
