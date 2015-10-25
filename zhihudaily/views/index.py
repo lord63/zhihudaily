@@ -8,12 +8,14 @@ import datetime
 from flask import render_template, Blueprint, request, redirect, url_for
 
 from zhihudaily.utils import make_request, get_news_info, handle_image
+from zhihudaily.cache import cache
 
 
 text_ui = Blueprint('text_ui', __name__, template_folder='templates')
 
 
 @text_ui.route('/')
+@cache.cached(timeout=900)
 def index():
     """The index page, for 文字 UI."""
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
@@ -23,7 +25,9 @@ def index():
                            is_today=True)
 
 
+# TODO: use our own database.
 @text_ui.route('/before/<date>')
+@cache.cached(timeout=900)
 def before(date):
     """For 文字 UI and 图片 UI, before today."""
     r = make_request(

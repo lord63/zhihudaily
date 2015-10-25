@@ -10,6 +10,7 @@ from flask import render_template, jsonify, Blueprint
 
 from zhihudaily.models import Zhihudaily
 from zhihudaily.utils import make_request
+from zhihudaily.cache import cache
 
 
 three_columns_ui = Blueprint('three_columns_ui', __name__,
@@ -17,6 +18,7 @@ three_columns_ui = Blueprint('three_columns_ui', __name__,
 
 
 @three_columns_ui.route('/three-columns')
+@cache.cached(timeout=3600)
 def three_columns():
     """The page for 三栏 UI"""
     today = datetime.date.today()
@@ -27,6 +29,7 @@ def three_columns():
 
 
 @three_columns_ui.route('/three-columns/<date>')
+@cache.cached(timeout=900)
 def show_titles(date):
     """Get titles via AJAX."""
     today = datetime.date.today().strftime('%Y%m%d')
@@ -45,6 +48,7 @@ def show_titles(date):
 
 
 @three_columns_ui.route('/three-columns/append-date/<date>')
+@cache.cached(timeout=10800)
 def append_date(date):
     """Append dates when scroll to bottom via AJAX"""
     date_obj = datetime.datetime.strptime(date, '%Y%m%d').date()
@@ -56,6 +60,7 @@ def append_date(date):
 
 
 @three_columns_ui.route('/three-columns/contents/<id>')
+@cache.cached(timeout=10800)
 def get_content(id):
     r = make_request('http://news-at.zhihu.com/api/4/news/' + id)
     return jsonify(body=r.json()['body'])

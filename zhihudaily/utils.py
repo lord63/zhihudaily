@@ -7,7 +7,10 @@ import re
 
 import requests
 
+from zhihudaily.cache import cache
 
+
+@cache.memoize(timeout=1200)
 def make_request(url):
     session = requests.Session()
     session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \

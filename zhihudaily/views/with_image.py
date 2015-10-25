@@ -7,11 +7,14 @@ from __future__ import absolute_import, unicode_literals
 from flask import render_template, Blueprint
 
 from zhihudaily.utils import make_request, get_news_info, handle_image
+from zhihudaily.cache import cache
+
 
 image_ui = Blueprint('image_ui', __name__, template_folder='templates')
 
 
 @image_ui.route('/withimage')
+@cache.cached(timeout=900)
 def with_image():
     """The page for 图片 UI."""
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')

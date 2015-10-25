@@ -10,6 +10,7 @@ from flask.ext.paginate import Pagination
 
 from zhihudaily.models import Zhihudaily
 from zhihudaily.utils import make_request, get_news_info, handle_image
+from zhihudaily.cache import cache
 
 
 pages_ui = Blueprint('pages_ui', __name__, template_folder='templates')
@@ -17,8 +18,10 @@ pages_ui = Blueprint('pages_ui', __name__, template_folder='templates')
 
 @pages_ui.route('/pages')
 @pages_ui.route('/pages/<int:page>')
+@cache.cached(timeout=900)
 def pages(page=1):
     """The page the 分页 UI."""
+    # TODO: don't send useless requests.
     r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
     (display_date, date, news_list) = get_news_info(r)
     news_list = handle_image(news_list)
