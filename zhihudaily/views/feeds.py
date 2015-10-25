@@ -13,6 +13,7 @@ from flask import request, Blueprint
 
 from zhihudaily.utils import make_request
 from zhihudaily.configs import Config
+from zhihudaily.cache import cache
 
 
 feeds = Blueprint('feeds', __name__, template_folder='templates')
@@ -20,6 +21,7 @@ redis_server = Config.redis_server
 
 
 @feeds.route('/feeds')
+@cache.cached(timeout=1200)
 def generate_feed():
     feed = AtomFeed('Zhihudaily',
                     feed_url=request.url,
