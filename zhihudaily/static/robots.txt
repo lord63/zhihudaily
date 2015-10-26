@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /feeds
+Disallow: /withimage
+Disallow: /pages
+Disallow: /*?image=True$
+
+User-agent: Googlebot-Image
+Disallow: /
