@@ -22,7 +22,7 @@ def make_request(url):
 def get_news_info(response):
     display_date = response.json()['display_date']
     date = response.json()['date']
-    news_list = [item for item in response.json()['news']]
+    news_list = response.json()['news']
     return display_date, date, news_list
 
 
