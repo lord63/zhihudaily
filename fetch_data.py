@@ -38,6 +38,8 @@ def init_database(database, num):
                 the int number stands for the number of days to fetch;
                 string 'all' means fetch all the news start from 20130519.
     """
+
+    print 'Start to init the database...'
     cursor = database.cursor()
     cursor.execute('CREATE TABLE zhihudaily ('
                    'id integer ,'
@@ -64,10 +66,13 @@ def init_database(database, num):
 
 def daily_update(database):
     """Fetch yestoday's news and save to database"""
+
+    print "Adding yestoday's news to database..."
     today = datetime.date.today().strftime("%Y%m%d")
     r = session.get(
         'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(today))
     save(database, r)
+    print "Checking date integrity..."
     check_integrity(database, date_range=10)
     database.close()
 
@@ -87,7 +92,8 @@ def check_integrity(database, date_range=10):
         date_in_db = [
             date[0] for date in
             cursor.execute(
-                'SELECT date FROM zhihudaily LIMIT {0}'.format(date_range)
+                ('SELECT date FROM zhihudaily ORDER BY date DESC '
+                 'LIMIT {0}').format(date_range)
             )
         ]
         delta = date_range
@@ -120,12 +126,11 @@ def check_integrity(database, date_range=10):
 if __name__ == '__main__':
     database_path = path.join(path.dirname(path.abspath(__file__)),
                               'zhihudaily/zhihudaily.db')
-    database = sqlite3.connect(database_path)
     if not path.exists(database_path):
+        database = sqlite3.connect(database_path)
         sys.argv.append(10)  # The default num of days is 10.
         num = sys.argv[1]
-        print 'Start to init the database...'
         init_database(database, num)
     else:
-        print "Add yestoday's news to database."
+        database = sqlite3.connect(database_path)
         daily_update(database)
