@@ -32,7 +32,12 @@ def save(database, response):
 
 
 def init_database(database, num):
-    """Fetch news and init the database"""
+    """Fetch news and init the database
+
+    :param num: int number or 'all'.
+                the int number stands for the number of days to fetch;
+                string 'all' means fetch all the news start from 20130519.
+    """
     cursor = database.cursor()
     cursor.execute('CREATE TABLE zhihudaily ('
                    'id integer ,'
@@ -68,23 +73,38 @@ def daily_update(database):
 
 
 def check_integrity(database, date_range=10):
-    """Check data integrity, make sure we won't miss a day"""
-    cursor = database.cursor()
-    date_in_db = []
-    for date in cursor.execute('SELECT date FROM zhihudaily'):
-        date_in_db.append(date[0])
+    """Check data integrity, make sure we won't miss a day
 
+    :param date_range: int number or 'all'.
+                       the int number stands for the range of days to check;
+                       string 'all' means check data from start 20130519.
+    """
+
+    cursor = database.cursor()
     today = datetime.date.today()
-    if date_range == 'all':
+
+    if type(date_range) == int:
+        date_in_db = [
+            date[0] for date in
+            cursor.execute(
+                'SELECT date FROM zhihudaily LIMIT {0}'.format(date_range)
+            )
+        ]
+        delta = date_range
+    elif date_range == 'all':
+        date_in_db = [
+            date[0] for date in cursor.execute('SELECT date FROM zhihudaily')
+        ]
         birthday = datetime.date(2013, 5, 20)
         delta = (today - birthday).days
     else:
-        delta = date_range
-    date_in_real = []
-    for i in range(1, delta+1):
-        date = (today - datetime.timedelta(i)).strftime("%Y%m%d")
-        date_in_real.insert(0, int(date))
+        raise TypeError("Bad parameter date_range, "
+                        "should be an integer or string value 'all'.")
 
+    date_in_real = [
+        int((today - datetime.timedelta(i)).strftime("%Y%m%d"))
+        for i in range(1, delta+1)
+    ]
     missed_date = set(date_in_real) - set(date_in_db)
     for date in missed_date:
         date_in_datetime = datetime.date(
