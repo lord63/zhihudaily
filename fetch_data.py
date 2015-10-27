@@ -5,6 +5,7 @@ import datetime
 import sqlite3
 import json
 from os import path
+import re
 import sys
 
 import requests
@@ -15,11 +16,24 @@ session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
                         x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
 
 
+def handle_image(news_list):
+    """Point all the images to my server, because use zhihudaily's
+    images directly may get 403 error.
+    """
+    for news in news_list:
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$',
+                          news['image']).groups()
+        news['image'] = (
+            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(
+                items[0], items[1]))
+    return news_list
+
+
 def save(database, response):
     """Get someday's news info from the API and save to the database"""
     cursor = database.cursor()
     date = int(response.json()['date'])
-    json_news = json.dumps(response.json()['news'])
+    json_news = json.dumps(handle_image(response.json()['news']))
     display_date = response.json()['display_date']
     try:
         cursor.execute('INSERT INTO zhihudaily VALUES (?, ?, ?, ?)',
