@@ -44,11 +44,10 @@ def before(date):
             return redirect(url_for('text_ui.index'))
     is_today = r.json().get('is_today', False)
     news_list = handle_image(news_list)
-    if request.args['image'] == 'True':
-        return render_template('with_image.html', lists=news_list,
-                               display_date=display_date, date=strdate,
-                               is_today=is_today, day_after=day_after)
-    else:
-        return render_template("index.html", lists=news_list,
-                               display_date=display_date, date=strdate,
-                               is_today=is_today, day_after=day_after)
+
+    template_name = {
+        'False': 'index.html', 'True': 'with_image.html'
+    }.get(request.args['image'], 'False')
+    return render_template(template_name, lists=news_list,
+                           display_date=display_date, date=strdate,
+                           is_today=is_today, day_after=day_after)
