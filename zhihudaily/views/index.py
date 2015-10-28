@@ -32,8 +32,13 @@ def index():
                            is_today=True)
 
 
+def full_request_path():
+    """Make a key that includes GET parameters."""
+    return request.full_path
+
+
 @text_ui.route('/<date>')
-@cache.cached(timeout=900)
+@cache.cached(timeout=900, key_prefix=full_request_path)
 def before(date):
     """For 文字 UI and 图片 UI, before today."""
 
