@@ -60,7 +60,6 @@ def before(date):
     day_after = (
         datetime.datetime.strptime(date, '%Y%m%d') + datetime.timedelta(1)
     ).strftime('%Y%m%d')
-    is_today = today == date
 
     template_name = {
         'False': 'index.html', 'True': 'with_image.html'
@@ -70,4 +69,4 @@ def before(date):
                            display_date=display_date,
                            day_before=day_before,
                            day_after=day_after,
-                           is_today=is_today)
+                           is_today=False)
