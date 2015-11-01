@@ -31,9 +31,9 @@ def handle_image(news_list):
     images directly may get 403 error.
     """
     for news in news_list:
-        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$',
-                          news['image']).groups()
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image'])
+        if items is None:
+            continue
         news['image'] = (
-            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(
-                items[0], items[1]))
+            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(*items.groups()))
     return news_list
