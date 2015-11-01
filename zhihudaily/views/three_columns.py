@@ -4,9 +4,8 @@
 from __future__ import absolute_import, unicode_literals
 
 import datetime
-import json
 
-from flask import render_template, jsonify, Blueprint
+from flask import render_template, jsonify, Blueprint, json
 
 from zhihudaily.models import Zhihudaily
 from zhihudaily.utils import make_request

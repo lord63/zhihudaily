@@ -4,11 +4,10 @@
 from __future__ import absolute_import, unicode_literals, print_function
 
 import datetime
-import json
 from urlparse import urljoin
 
 from werkzeug.contrib.atom import AtomFeed
-from flask import request, Blueprint
+from flask import request, Blueprint, json
 
 
 from zhihudaily.utils import make_request

@@ -3,9 +3,7 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import json
-
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, json
 from flask.ext.paginate import Pagination
 
 from zhihudaily.models import Zhihudaily
