@@ -26,7 +26,7 @@ def after_request(response):
     return response
 
 
-@utils.route('/img/<server>/<hash_string>')
+@utils.route('/img/<server>/<path:hash_string>')
 def image(server, hash_string):
     """Handle image, use redis to cache image."""
     image_url = 'http://{0}.zhimg.com/{1}'.format(server, hash_string)
