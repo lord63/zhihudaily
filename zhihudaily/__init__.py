@@ -8,7 +8,7 @@ from zhihudaily.cache import cache
 
 
 def create_app(config):
-    app = Flask(__name__)
+    app = Flask('zhihudaily')
     app.config.from_object(config)
     cache.init_app(app)
 
