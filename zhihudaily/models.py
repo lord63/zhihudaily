@@ -20,5 +20,5 @@ class Zhihudaily(BaseModel):
 
 
 def create_tables():
-    database.connect()
-    database.create_tables([Zhihudaily])
+    Config.database.connect()
+    Config.database.create_tables([Zhihudaily])
