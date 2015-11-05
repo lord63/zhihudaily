@@ -1,150 +1,161 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function, absolute_import
+
 import datetime
-import sqlite3
-import json
+import os
 from os import path
-import re
 import sys
 
 import requests
+import peewee
+
+from zhihudaily.models import Zhihudaily, create_tables
+from zhihudaily.utils import handle_image, get_news_info
 
 
-session = requests.Session()
-session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                        x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
+class Crawler(object):
+    def __init__(self):
+        # Zhihudaily's birthday is 20130519, but the url should be
+        # http://news.at.zhihu.com/api/1.2/news/before/20130520.
+        self.birthday = datetime.date(2013, 5, 20)
+        self.today = datetime.date.today()
 
+        self.session = requests.Session()
+        self.session.headers.update(
+            {'User-Agent': ("Mozilla/5.0 (X11; Ubuntu; Linux "
+                            "x86_64; rv:28.0) Gecko/20100101 Firefox/28.0")})
 
-def handle_image(news_list):
-    """Point all the images to my server, because use zhihudaily's
-    images directly may get 403 error.
-    """
-    for news in news_list:
-        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$',
-                          news['image']).groups()
-        news['image'] = (
-            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(
-                items[0], items[1]))
-    return news_list
+    def init_database(self, num=10):
+        """Init the database and fetch news.
 
+        :param num: int number or string 'all'.
+                    the int number stands for the number of days to fetch;
+                    string 'all' means fetch all the news start from 20130519.
+        """
+        print("Init the database...")
+        database_path = path.join(path.dirname(path.realpath(__file__)),
+                                  'zhihudaily/zhihudaily.db')
+        if path.exists(database_path):
+            # FIXME: alert before remove the database.
+            os.remove(database_path)
+        create_tables()
 
-def save(database, response):
-    """Get someday's news info from the API and save to the database"""
-    cursor = database.cursor()
-    date = int(response.json()['date'])
-    json_news = json.dumps(handle_image(response.json()['news']))
-    display_date = response.json()['display_date']
-    try:
-        cursor.execute('INSERT INTO zhihudaily VALUES (?, ?, ?, ?)',
-                       (1, date, json_news, display_date))
-        database.commit()
-    except sqlite3.IntegrityError:  # if the record has been stored before
-        pass
-    except Exception as error:
-        print error
+        if num == 'all':
+            delta = (self.today - self.birthday).days
+        else:
+            delta = int(num)
+        print('There are {0} records to be fetched.'.format(delta))
 
+        for i in reversed(range(1, delta)):
+            date = (self.today - datetime.timedelta(i)).strftime("%Y%m%d")
+            self._save_to_database(date)
+            sys.stdout.write('\rcollect {0} records'.format(delta - i + 1))
+            sys.stdout.flush()
+        sys.stdout.write('\n')
+        print('Init database: done.')
 
-def init_database(database, num):
-    """Fetch news and init the database
+    def daily_update(self):
+        """Fetch yestoday's news and save to database."""
+        print("Adding yestoday's news to database...")
+        yestoday = (self.today - datetime.timedelta(1)).strftime("%Y%m%d")
+        self._save_to_database(yestoday)
+        self._check_integrity()
 
-    :param num: int number or 'all'.
-                the int number stands for the number of days to fetch;
-                string 'all' means fetch all the news start from 20130519.
-    """
+    def _check_integrity(self, date_range=10):
+        """Check data integrity, make sure we won't miss a day
 
-    print 'Start to init the database...'
-    cursor = database.cursor()
-    cursor.execute('CREATE TABLE zhihudaily ('
-                   'id integer ,'
-                   'date integer primary key,'
-                   'json_news varchar,'
-                   'display_date varchar)')
-    today = datetime.date.today()
-    if num == 'all':
-        # zhihudaily's birthday is 20130519
-        birthday = datetime.date(2013, 5, 20)
-        delta = (today - birthday).days
-    else:
-        delta = int(num)
-    print 'There are {0} records to be fatched.'.format(delta)
-    for i in range(delta):
-        date = (today - datetime.timedelta(i)).strftime("%Y%m%d")
-        r = session.get(
-            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date))
-        save(database, r)
-        print '\rcollect {0} records'.format(i+1),
-        sys.stdout.flush()
-    database.close()
+        :param date_range: int number or 'all'.
+                           the int number means the range of days to check;
+                           string 'all' means check data from start 20130519.
+        """
+        print("Checking date integrity...")
+        if isinstance(date_range, int):
+            date_in_db = [
+                news.date for news in
+                (Zhihudaily.select(Zhihudaily.date)
+                           .order_by(Zhihudaily.date.desc())
+                           .limit(date_range))
+            ]
+            delta = date_range
+        elif date_range == 'all':
+            date_in_db = [
+                news.date for news in Zhihudaily.select(Zhihudaily.date)
+            ]
+            delta = (self.today - self.birthday).days
+        else:
+            raise TypeError("Bad parameter date_range, "
+                            "should be an integer or string value 'all'.")
 
-
-def daily_update(database):
-    """Fetch yestoday's news and save to database"""
-
-    print "Adding yestoday's news to database..."
-    today = datetime.date.today().strftime("%Y%m%d")
-    r = session.get(
-        'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(today))
-    save(database, r)
-    print "Checking date integrity..."
-    check_integrity(database, date_range=10)
-    database.close()
-
-
-def check_integrity(database, date_range=10):
-    """Check data integrity, make sure we won't miss a day
-
-    :param date_range: int number or 'all'.
-                       the int number stands for the range of days to check;
-                       string 'all' means check data from start 20130519.
-    """
-
-    cursor = database.cursor()
-    today = datetime.date.today()
-
-    if type(date_range) == int:
-        date_in_db = [
-            date[0] for date in
-            cursor.execute(
-                ('SELECT date FROM zhihudaily ORDER BY date DESC '
-                 'LIMIT {0}').format(date_range)
-            )
+        date_in_real = [
+            int((self.today - datetime.timedelta(i)).strftime("%Y%m%d"))
+            for i in range(1, delta+1)
         ]
-        delta = date_range
-    elif date_range == 'all':
-        date_in_db = [
-            date[0] for date in cursor.execute('SELECT date FROM zhihudaily')
-        ]
-        birthday = datetime.date(2013, 5, 20)
-        delta = (today - birthday).days
-    else:
-        raise TypeError("Bad parameter date_range, "
-                        "should be an integer or string value 'all'.")
+        missed_date = set(date_in_real) - set(date_in_db)
+        for date in missed_date:
+            print("fetching {0}...".format(date))
+            self._save_to_database(str(date))
 
-    date_in_real = [
-        int((today - datetime.timedelta(i)).strftime("%Y%m%d"))
-        for i in range(1, delta+1)
-    ]
-    missed_date = set(date_in_real) - set(date_in_db)
-    for date in missed_date:
+    def _save_to_database(self, given_date):
+        """Save news on the specified date to the database.
+
+        :param news: the news in json format.
+        """
+        if Zhihudaily.select().where(
+                Zhihudaily.date == int(given_date)).exists():
+            print('{0} already in our database, skip.'.format(given_date))
+            return
+        response_json = self._send_request(given_date)
+        display_date, date, news_list = get_news_info(response_json)
+        zhihudaily = Zhihudaily(date=int(date), display_date=display_date,
+                                json_news=handle_image(news_list))
+        try:
+            zhihudaily.save()
+        except Exception as error:
+            print(error)
+
+    def _send_request(self, date):
+        """Send request to zhihudaily's API server, return the response.
+
+        :param date: get news on that day.
+        """
+
+        # Since the API is before/<date>, news on 20130519 should use
+        # before/20130520, so we should use the day after it.
+        date = int(date)
         date_in_datetime = datetime.date(
             *[date / 10000, date % 10000 / 100, date % 100])
-        date_ = (date_in_datetime + datetime.timedelta(1)).strftime("%Y%m%d")
-        r = session.get(
-            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(date_))
-        print "fetching {0}...".format(date)
-        save(database, r)
-    database.close()
+        date_after = (
+            date_in_datetime + datetime.timedelta(1)).strftime("%Y%m%d")
+        response = self.session.get(
+            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
+                date_after))
+        # FIXME: exception handle when can't get the json.
+        return response
 
 
 if __name__ == '__main__':
-    database_path = path.join(path.dirname(path.abspath(__file__)),
-                              'zhihudaily/zhihudaily.db')
-    if not path.exists(database_path):
-        database = sqlite3.connect(database_path)
-        sys.argv.append(10)  # The default num of days is 10.
-        num = sys.argv[1]
-        init_database(database, num)
+    doc = """
+    Usage:
+        - init database(deault will fetch 10 days news)
+            $ python fetch_date.py init
+        - update database(fetch yestoday's news and check data integrity)
+            $ python fetch_date.py update
+        - check data integrity(check data integer)
+            $ python fetch_date.py check <number>
+    """
+    crawler = Crawler()
+    if sys.argv[1] == 'init':
+        crawler.init_database()
+    elif sys.argv[1] == 'update':
+        crawler.daily_update()
+    elif sys.argv[1] == 'check':
+        if len(sys.argv) == 2:
+            raise TypeError("Specify the number please."
+                            "e.g. $ python fetch_date.py check <number>")
+        date_range = int(sys.argv[2])
+        crawler._check_integrity(date_range)
     else:
-        database = sqlite3.connect(database_path)
-        daily_update(database)
+        raise ValueError(("I don't know what you're saying: <{0}>.\n"
+                          "{1}").format(' '.join(sys.argv[1:]), doc))
