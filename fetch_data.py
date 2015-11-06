@@ -39,8 +39,13 @@ class Crawler(object):
         database_path = path.join(path.dirname(path.realpath(__file__)),
                                   'zhihudaily/zhihudaily.db')
         if path.exists(database_path):
-            # FIXME: alert before remove the database.
-            os.remove(database_path)
+            confirm = click.prompt(
+                "Already exists a database, continue by removing it? [Y/n]",
+                default='Y', show_default=False)
+            if confirm == 'Y':
+                os.remove(database_path)
+            else:
+                sys.exit('Keep the database and abort.')
         create_tables()
 
         if num == 'all':
