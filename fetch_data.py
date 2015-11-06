@@ -115,6 +115,8 @@ class Crawler(object):
             print('{0} already in our database, skip.'.format(given_date))
             return
         response_json = self._send_request(given_date)
+        if response_json is None:
+            return
         display_date, date, news_list = get_news_info(response_json)
         zhihudaily = Zhihudaily(date=int(date), display_date=display_date,
                                 json_news=handle_image(news_list))
@@ -135,11 +137,15 @@ class Crawler(object):
         # before/20130520, so we should use the day after it.
         date_after = (
             date_in_datetime + datetime.timedelta(1)).strftime("%Y%m%d")
-        response = self.session.get(
-            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
-                date_after))
-        # FIXME: exception handle when can't get the json.
-        return response
+        try:
+            response = self.session.get(
+                'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
+                    date_after), timeout=0.00000001)
+        except requests.exceptions.RequestException as error:
+            print("ERROR: {0}".format(error.args[0]))
+            return None
+        else:
+            return response
 
 
 @click.group()
