@@ -60,6 +60,7 @@ class Crawler(object):
             sys.stdout.write('\rcollect {0} records'.format(delta - i + 1))
             sys.stdout.flush()
         sys.stdout.write('\n')
+        self.check_integrity(num)
         print('Init database: done.')
 
     def daily_update(self):
