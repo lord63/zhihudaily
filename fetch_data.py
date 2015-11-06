@@ -100,7 +100,7 @@ class Crawler(object):
     def _save_to_database(self, given_date):
         """Save news on the specified date to the database.
 
-        :param news: the news in json format.
+        :param given_date: strint type, e.g. '20151106'.
         """
         if Zhihudaily.select().where(
                 Zhihudaily.date == int(given_date)).exists():
@@ -118,14 +118,14 @@ class Crawler(object):
     def _send_request(self, date):
         """Send request to zhihudaily's API server, return the response.
 
-        :param date: get news on that day.
+        :param date: strint type, get news on that day, e.g. '20151106'.
         """
 
-        # Since the API is before/<date>, news on 20130519 should use
-        # before/20130520, so we should use the day after it.
         date = int(date)
         date_in_datetime = datetime.date(
             *[date / 10000, date % 10000 / 100, date % 100])
+        # Since the API is before/<date>, news on 20130519 should use
+        # before/20130520, so we should use the day after it.
         date_after = (
             date_in_datetime + datetime.timedelta(1)).strftime("%Y%m%d")
         response = self.session.get(
@@ -146,6 +146,7 @@ if __name__ == '__main__':
             $ python fetch_date.py check <number>
     """
     crawler = Crawler()
+    # FIXME: better command line interface.
     if sys.argv[1] == 'init':
         crawler.init_database()
     elif sys.argv[1] == 'update':
