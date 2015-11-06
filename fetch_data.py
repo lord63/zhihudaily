@@ -154,14 +154,17 @@ def cli():
         $ python fetch_date.py update
     - check data integrity, make sure we won't miss a day
         $ python fetch_date.py check <number>
+
+    get more detailed info for each subcommand via <subcommand --help>
     """
     pass
 
 
 @cli.command()
-def init():
+@click.option('--num', '-n', default=10)
+def init(num):
     """init database."""
-    crawler.init_database()
+    crawler.init_database(num)
 
 
 @cli.command()
