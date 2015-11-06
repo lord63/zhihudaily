@@ -10,7 +10,6 @@ import sys
 
 import click
 import requests
-import peewee
 
 from zhihudaily.models import Zhihudaily, create_tables
 from zhihudaily.utils import handle_image, get_news_info
@@ -104,12 +103,12 @@ class Crawler(object):
         for date in missed_date:
             print("fetching {0}...".format(date))
             self._save_to_database(str(date))
-        print("Check date integrity: done.")
+        print("Check data integrity: done.")
 
     def _save_to_database(self, given_date):
         """Save news on the specified date to the database.
 
-        :param given_date: strint type, e.g. '20151106'.
+        :param given_date: string type, e.g. '20151106'.
         """
         if Zhihudaily.select().where(
                 Zhihudaily.date == int(given_date)).exists():
