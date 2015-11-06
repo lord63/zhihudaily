@@ -8,6 +8,7 @@ import os
 from os import path
 import sys
 
+import click
 import requests
 import peewee
 
@@ -48,7 +49,7 @@ class Crawler(object):
             delta = int(num)
         print('There are {0} records to be fetched.'.format(delta))
 
-        for i in reversed(range(1, delta)):
+        for i in reversed(range(1, delta+1)):
             date = (self.today - datetime.timedelta(i)).strftime("%Y%m%d")
             self._save_to_database(date)
             sys.stdout.write('\rcollect {0} records'.format(delta - i + 1))
@@ -61,9 +62,10 @@ class Crawler(object):
         print("Adding yestoday's news to database...")
         yestoday = (self.today - datetime.timedelta(1)).strftime("%Y%m%d")
         self._save_to_database(yestoday)
-        self._check_integrity()
+        print("Update database: done.")
+        self.check_integrity()
 
-    def _check_integrity(self, date_range=10):
+    def check_integrity(self, date_range=10):
         """Check data integrity, make sure we won't miss a day
 
         :param date_range: int number or 'all'.
@@ -96,6 +98,7 @@ class Crawler(object):
         for date in missed_date:
             print("fetching {0}...".format(date))
             self._save_to_database(str(date))
+        print("Check date integrity: done.")
 
     def _save_to_database(self, given_date):
         """Save news on the specified date to the database.
@@ -135,28 +138,40 @@ class Crawler(object):
         return response
 
 
-if __name__ == '__main__':
-    doc = """
-    Usage:
-        - init database(deault will fetch 10 days news)
-            $ python fetch_date.py init
-        - update database(fetch yestoday's news and check data integrity)
-            $ python fetch_date.py update
-        - check data integrity(check data integer)
-            $ python fetch_date.py check <number>
+@click.group()
+def cli():
+    """Simple script to fetch the zhihudaily news.
+
+    \b
+    - init database(deault will fetch 10 days' news)
+        $ python fetch_date.py init
+    - update database(fetch yestoday's news and check data integrity)
+        $ python fetch_date.py update
+    - check data integrity, make sure we won't miss a day
+        $ python fetch_date.py check <number>
     """
+    pass
+
+
+@cli.command()
+def init():
+    """init database."""
+    crawler.init_database()
+
+
+@cli.command()
+def update():
+    """fetch yestoday's news."""
+    crawler.daily_update()
+
+
+@cli.command()
+@click.argument('date_range', type=int)
+def check(date_range):
+    """check data integrity."""
+    crawler.check_integrity(date_range)
+
+
+if __name__ == '__main__':
     crawler = Crawler()
-    # FIXME: better command line interface.
-    if sys.argv[1] == 'init':
-        crawler.init_database()
-    elif sys.argv[1] == 'update':
-        crawler.daily_update()
-    elif sys.argv[1] == 'check':
-        if len(sys.argv) == 2:
-            raise TypeError("Specify the number please."
-                            "e.g. $ python fetch_date.py check <number>")
-        date_range = int(sys.argv[2])
-        crawler._check_integrity(date_range)
-    else:
-        raise ValueError(("I don't know what you're saying: <{0}>.\n"
-                          "{1}").format(' '.join(sys.argv[1:]), doc))
+    cli()

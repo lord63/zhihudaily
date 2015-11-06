@@ -5,3 +5,4 @@ flask-paginate >= 0.2.8
 redis >= 2.10.3
 Flask-Script >= 2.0.5
 Flask-cache >= 0.13.1
+click >= 5.1
