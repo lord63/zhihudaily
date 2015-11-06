@@ -129,9 +129,8 @@ class Crawler(object):
         :param date: strint type, get news on that day, e.g. '20151106'.
         """
 
-        date = int(date)
         date_in_datetime = datetime.date(
-            *[date / 10000, date % 10000 / 100, date % 100])
+            int(date[0:4]), int(date[4:6]), int(date[6:8]))
         # Since the API is before/<date>, news on 20130519 should use
         # before/20130520, so we should use the day after it.
         date_after = (
