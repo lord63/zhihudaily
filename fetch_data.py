@@ -123,7 +123,7 @@ class Crawler(object):
         try:
             zhihudaily.save()
         except Exception as error:
-            print(error)
+            print("Fail to save to database: {0}".format(error.args[0]))
 
     def _send_request(self, date):
         """Send request to zhihudaily's API server, return the response.
@@ -142,7 +142,7 @@ class Crawler(object):
                 'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
                     date_after), timeout=0.00000001)
         except requests.exceptions.RequestException as error:
-            print("ERROR: {0}".format(error.args[0]))
+            print("Fail to send the request: {0}".format(error.args[0]))
             return None
         else:
             return response
