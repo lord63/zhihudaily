@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import
+from __future__ import absolute_import
 
 import datetime
 import os
@@ -34,7 +34,7 @@ class Crawler(object):
                     the int number stands for the number of days to fetch;
                     string 'all' means fetch all the news start from 20130519.
         """
-        print("Init the database...")
+        click.echo("Init the database...")
         database_path = path.join(path.dirname(path.realpath(__file__)),
                                   'zhihudaily/zhihudaily.db')
         if path.exists(database_path):
@@ -51,7 +51,7 @@ class Crawler(object):
             delta = (self.today - self.birthday).days
         else:
             delta = int(num)
-        print('There are {0} records to be fetched.'.format(delta))
+        click.echo('There are {0} records to be fetched.'.format(delta))
 
         for i in reversed(range(1, delta+1)):
             date = (self.today - datetime.timedelta(i)).strftime("%Y%m%d")
@@ -60,14 +60,14 @@ class Crawler(object):
             sys.stdout.flush()
         sys.stdout.write('\n')
         self.check_integrity(num)
-        print('Init database: done.')
+        click.echo('Init database: done.')
 
     def daily_update(self):
         """Fetch yestoday's news and save to database."""
-        print("Adding yestoday's news to database...")
+        click.echo("Adding yestoday's news to database...")
         yestoday = (self.today - datetime.timedelta(1)).strftime("%Y%m%d")
         self._save_to_database(yestoday)
-        print("Update database: done.")
+        click.echo("Update database: done.")
         self.check_integrity()
 
     def check_integrity(self, date_range=10):
@@ -77,7 +77,7 @@ class Crawler(object):
                            the int number means the range of days to check;
                            string 'all' means check data from start 20130519.
         """
-        print("Checking date integrity...")
+        click.echo("Checking date integrity...")
         if isinstance(date_range, int):
             date_in_db = [
                 news.date for news in
@@ -101,9 +101,9 @@ class Crawler(object):
         ]
         missed_date = set(date_in_real) - set(date_in_db)
         for date in missed_date:
-            print("fetching {0}...".format(date))
+            click.echo("fetching {0}...".format(date))
             self._save_to_database(str(date))
-        print("Check data integrity: done.")
+        click.echo("Check data integrity: done.")
 
     def _save_to_database(self, given_date):
         """Save news on the specified date to the database.
@@ -112,7 +112,7 @@ class Crawler(object):
         """
         if Zhihudaily.select().where(
                 Zhihudaily.date == int(given_date)).exists():
-            print('{0} already in our database, skip.'.format(given_date))
+            click.echo('{0} already in our database, skip.'.format(given_date))
             return
         response_json = self._send_request(given_date)
         if response_json is None:
@@ -123,7 +123,7 @@ class Crawler(object):
         try:
             zhihudaily.save()
         except Exception as error:
-            print("Fail to save to database: {0}".format(error.args[0]))
+            click.echo("Fail to save to database: {0}".format(error.args[0]))
 
     def _send_request(self, date):
         """Send request to zhihudaily's API server, return the response.
@@ -142,7 +142,7 @@ class Crawler(object):
                 'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
                     date_after), timeout=0.00000001)
         except requests.exceptions.RequestException as error:
-            print("Fail to send the request: {0}".format(error.args[0]))
+            click.echo("Fail to send the request: {0}".format(error.args[0]))
             return None
         else:
             return response
