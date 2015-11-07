@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 
 import datetime
+import json
 import os
 from os import path
 import sys
@@ -119,7 +120,7 @@ class Crawler(object):
             return
         display_date, date, news_list = get_news_info(response_json)
         zhihudaily = Zhihudaily(date=int(date), display_date=display_date,
-                                json_news=handle_image(news_list))
+                                json_news=json.dumps(handle_image(news_list)))
         try:
             zhihudaily.save()
         except Exception as error:
