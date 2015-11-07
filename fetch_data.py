@@ -140,7 +140,7 @@ class Crawler(object):
         try:
             response = self.session.get(
                 'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
-                    date_after), timeout=0.00000001)
+                    date_after))
         except requests.exceptions.RequestException as error:
             click.echo("Fail to send the request: {0}".format(error.args[0]))
             return None
