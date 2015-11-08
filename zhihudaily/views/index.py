@@ -49,9 +49,7 @@ def before(date):
             return redirect(url_for('text_ui.index'))
 
     news = Zhihudaily.select().where(Zhihudaily.date == int(date)).get()
-    display_date, _, news_list = (news.display_date,
-                                  str(news.date),
-                                  json.loads(news.json_news))
+    display_date, news_list = news.display_date, json.loads(news.json_news)
 
     day_before = (
         datetime.datetime.strptime(date, '%Y%m%d') - datetime.timedelta(1)
