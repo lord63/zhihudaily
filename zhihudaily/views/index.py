@@ -36,7 +36,7 @@ def full_request_path():
     return request.full_path
 
 
-@text_ui.route('/<date>')
+@text_ui.route('/news/<date>')
 @cache.cached(timeout=900, key_prefix=full_request_path)
 def before(date):
     """For 文字 UI and 图片 UI, before today."""
