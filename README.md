@@ -1,11 +1,11 @@
 # ZhihuDaily
 
-又一个知乎日报的网页版。
+Yet another web application for Zhihu daily which is powered by Flask.
 
 ## Features
 
-* 多个 UI 选择，多种阅读方式
-* 支持 RSS feed
+* has several UIs, including text UI, image UI, pages UI and three columns UI
+* support RSS feed
 
 ## QuickStart
 
@@ -20,9 +20,9 @@ set up the development environment, virtualenv is recommended:
     $ pip install -r requirements.txt
 
 init the database(default is fetching last 10 days news, you can also specify
-the number of days, use 'all' if you want to get all the news):
+the number of days by -n):
 
-    $ python fetch_data.py
+    $ python fetch_data.py init
 
 run the zhihudaily:
 
