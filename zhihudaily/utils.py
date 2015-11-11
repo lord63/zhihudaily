@@ -3,8 +3,6 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import re
-
 import requests
 
 from zhihudaily.cache import cache
@@ -17,23 +15,3 @@ def make_request(url):
                             x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
     r = session.get(url)
     return r
-
-
-def get_news_info(response):
-    display_date = response.json()['display_date']
-    date = response.json()['date']
-    news_list = response.json()['news']
-    return display_date, date, news_list
-
-
-def handle_image(news_list):
-    """Point all the images to my server, because use zhihudaily's
-    images directly may get 403 error.
-    """
-    for news in news_list:
-        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image'])
-        if items is None:
-            continue
-        news['image'] = (
-            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(*items.groups()))
-    return news_list

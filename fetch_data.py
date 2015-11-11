@@ -7,13 +7,33 @@ import datetime
 import json
 import os
 from os import path
+import re
 import sys
 
 import click
 import requests
 
 from zhihudaily.models import Zhihudaily, create_tables
-from zhihudaily.utils import handle_image, get_news_info
+
+
+def handle_image(news_list):
+    """Point all the images to my server, because use zhihudaily's
+    images directly may get 403 error.
+    """
+    for news in news_list:
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image'])
+        if items is None:
+            continue
+        news['image'] = (
+            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(*items.groups()))
+    return news_list
+
+
+def get_news_info(response):
+    display_date = response.json()['display_date']
+    date = response.json()['date']
+    news_list = response.json()['news']
+    return display_date, date, news_list
 
 
 class Crawler(object):

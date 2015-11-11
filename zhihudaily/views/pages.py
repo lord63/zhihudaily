@@ -7,7 +7,7 @@ from flask import render_template, Blueprint, json
 from flask.ext.paginate import Pagination
 
 from zhihudaily.models import Zhihudaily
-from zhihudaily.utils import make_request, get_news_info, handle_image
+from zhihudaily.utils import make_request
 from zhihudaily.cache import cache
 
 

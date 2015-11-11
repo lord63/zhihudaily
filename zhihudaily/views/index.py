@@ -7,7 +7,7 @@ import datetime
 
 from flask import render_template, Blueprint, request, redirect, url_for, json
 
-from zhihudaily.utils import make_request, get_news_info
+from zhihudaily.utils import make_request
 from zhihudaily.cache import cache
 from zhihudaily.models import Zhihudaily
 
