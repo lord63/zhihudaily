@@ -7,7 +7,7 @@ import datetime
 
 from flask import render_template, Blueprint, request, redirect, url_for, json
 
-from zhihudaily.utils import make_request
+from zhihudaily.utils import make_request, Date
 from zhihudaily.cache import cache
 from zhihudaily.models import Zhihudaily
 
@@ -19,18 +19,13 @@ text_ui = Blueprint('text_ui', __name__, template_folder='templates')
 @cache.cached(timeout=900)
 def index():
     """The index page, for 文字 UI."""
-    # TODO: better way to handle the date utils.
-    today = datetime.date.today().strftime('%Y%m%d')
-    day_before = (
-        datetime.datetime.strptime(today, '%Y%m%d') - datetime.timedelta(1)
-    ).strftime('%Y%m%d')
-
-    news = Zhihudaily.select().where(Zhihudaily.date == int(today)).get()
+    day = Date()
+    news = Zhihudaily.select().where(Zhihudaily.date == int(day.today)).get()
 
     return render_template("index.html",
                            lists=json.loads(news.json_news),
                            display_date=news.display_date,
-                           day_before=day_before,
+                           day_before=day.day_before,
                            is_today=True)
 
 
