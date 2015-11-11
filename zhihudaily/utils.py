@@ -28,19 +28,26 @@ class Date(object):
 
     @property
     def today(self):
-        return self.date.strftime('%Y%m%d')
+        """
+        String format for today. It's a convenient way to get string
+        format for today even if the given_date is not today.
+        """
+        return datetime.date.today().strftime('%Y%m%d')
 
     @property
     def day_before(self):
+        """String format for the day before given_date."""
         return (self.date - datetime.timedelta(1)).strftime('%Y%m%d')
 
     @property
     def day_after(self):
+        """String format for the day after given_date."""
         return (self.date + datetime.timedelta(1)).strftime('%Y%m%d')
 
     # It's for three-columns ui, in the future we may implementation
     # it with javascript.
     def date_range(self, num):
+        """Return a string format date list according to the range num."""
         date_range = [
             (self.date - datetime.timedelta(i)).strftime('%Y%m%d')
             for i in range(num)

@@ -37,7 +37,7 @@ def full_request_path():
 def before(date):
     """For 文字 UI and 图片 UI, before today."""
 
-    day = Date()
+    day = Date(date)
     if int(day.today) <= int(date):
         if request.args.get('image', 'False') == 'True':
             return redirect(url_for('image_ui.with_image'))
