@@ -67,10 +67,10 @@ class Crawler(object):
             delta = int(num)
         click.echo('There are {0} records to be fetched.'.format(delta))
 
-        for i in reversed(range(1, delta+1)):
+        for i in reversed(range(delta)):
             date = (self.today - datetime.timedelta(i)).strftime("%Y%m%d")
             self._save_to_database(date)
-            sys.stdout.write('\r    collect {0} records'.format(delta - i + 1))
+            sys.stdout.write('\r    collect {0} records'.format(delta - i))
             sys.stdout.flush()
         sys.stdout.write('\n')
         self.check_integrity(num)
@@ -111,7 +111,7 @@ class Crawler(object):
 
         date_in_real = [
             int((self.today - datetime.timedelta(i)).strftime("%Y%m%d"))
-            for i in range(1, delta+1)
+            for i in range(delta)
         ]
         missed_date = set(date_in_real) - set(date_in_db)
         for date in missed_date:
