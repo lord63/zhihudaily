@@ -19,14 +19,17 @@ text_ui = Blueprint('text_ui', __name__, template_folder='templates')
 @cache.cached(timeout=900)
 def index():
     """The index page, for 文字 UI."""
-
-    r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
-    (display_date, date, news_list) = get_news_info(r)
+    # TODO: better way to handle the date utils.
+    today = datetime.date.today().strftime('%Y%m%d')
     day_before = (
-        datetime.datetime.strptime(date, '%Y%m%d') - datetime.timedelta(1)
+        datetime.datetime.strptime(today, '%Y%m%d') - datetime.timedelta(1)
     ).strftime('%Y%m%d')
-    return render_template("index.html", lists=news_list,
-                           display_date=display_date,
+
+    news = Zhihudaily.select().where(Zhihudaily.date == int(today)).get()
+
+    return render_template("index.html",
+                           lists=json.loads(news.json_news),
+                           display_date=news.display_date,
                            day_before=day_before,
                            is_today=True)
 
