@@ -29,13 +29,6 @@ def handle_image(news_list):
     return news_list
 
 
-def get_news_info(response):
-    display_date = response.json()['display_date']
-    date = response.json()['date']
-    news_list = response.json()['news']
-    return display_date, date, news_list
-
-
 class Crawler(object):
     def __init__(self):
         # Zhihudaily's birthday is 20130519, but the url should be
@@ -135,12 +128,15 @@ class Crawler(object):
                 Zhihudaily.date == int(given_date)).exists():
             click.echo('{0} already in our database, skip.'.format(given_date))
             return
-        response_json = self._send_request(given_date)
-        if response_json is None:
+        response = self._send_request(given_date)
+        if response is None:
             return
-        display_date, date, news_list = get_news_info(response_json)
-        zhihudaily = Zhihudaily(date=int(date), display_date=display_date,
-                                json_news=json.dumps(handle_image(news_list)))
+
+        zhihudaily = Zhihudaily(
+            date=int(response.json()['date']),
+            display_date=response.json()['display_date'],
+            json_news=json.dumps(handle_image(response.json()['news']))
+        )
         try:
             zhihudaily.save()
         except Exception as error:
