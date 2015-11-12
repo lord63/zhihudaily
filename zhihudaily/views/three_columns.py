@@ -3,12 +3,10 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import datetime
-
 from flask import render_template, jsonify, Blueprint, json
 
 from zhihudaily.models import Zhihudaily
-from zhihudaily.utils import make_request
+from zhihudaily.utils import make_request, Date
 from zhihudaily.cache import cache
 
 
@@ -20,10 +18,8 @@ three_columns_ui = Blueprint('three_columns_ui', __name__,
 @cache.cached(timeout=3600)
 def three_columns():
     """The page for 三栏 UI"""
-    today = datetime.date.today()
-    days = []
-    for i in range(20):
-        days.append((today - datetime.timedelta(i)).strftime('%Y%m%d'))
+    day = Date()
+    days = day.date_range(20)
     return render_template('three_columns.html', days=days)
 
 
@@ -31,30 +27,17 @@ def three_columns():
 @cache.cached(timeout=900)
 def show_titles(date):
     """Get titles via AJAX."""
-    today = datetime.date.today().strftime('%Y%m%d')
-    if today == date:
-        r = make_request('http://news.at.zhihu.com/api/1.2/news/latest')
-        news = [{'title': item['title'],
-                 'url': item['share_url'],
-                 'id': item['id']} for item in r.json()['news']]
-    else:
-        the_day = Zhihudaily.get(Zhihudaily.date == int(date))
-        json_news = json.loads(the_day.json_news)
-        news = [{'title': item['title'],
-                 'url': item['share_url'],
-                 'id': item['id']} for item in json_news]
-    return jsonify(news=news)
+    news = Zhihudaily.get(Zhihudaily.date == int(date))
+    json_news = json.loads(news.json_news)
+    return jsonify(news=json_news)
 
 
 @three_columns_ui.route('/three-columns/append-date/<date>')
 @cache.cached(timeout=10800)
 def append_date(date):
     """Append dates when scroll to bottom via AJAX"""
-    date_obj = datetime.datetime.strptime(date, '%Y%m%d').date()
-    append_list = []
-    for i in range(1, 16):
-        to_be_appended = (date_obj - datetime.timedelta(i)).strftime('%Y%m%d')
-        append_list.append(to_be_appended)
+    day = Date(date)
+    append_list = day.date_range(16)[1:]
     return jsonify(append_list=append_list)
 
 
