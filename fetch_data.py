@@ -77,10 +77,9 @@ class Crawler(object):
         click.echo('Init database: done.')
 
     def daily_update(self):
-        """Fetch yestoday's news and save to database."""
-        click.echo("Adding yestoday's news to database...")
-        yestoday = (self.today - datetime.timedelta(1)).strftime("%Y%m%d")
-        self._save_to_database(yestoday)
+        """Fetch today's latest news and save to database."""
+        click.echo("Update today's news in database...")
+        self._save_to_database(self.today.strftime("%Y%m%d"))
         click.echo("Update database: done.")
         self.check_integrity()
 
@@ -124,19 +123,21 @@ class Crawler(object):
 
         :param given_date: string type, e.g. '20151106'.
         """
-        if Zhihudaily.select().where(
-                Zhihudaily.date == int(given_date)).exists():
-            click.echo('{0} already in our database, skip.'.format(given_date))
-            return
         response = self._send_request(given_date)
         if response is None:
             return
 
-        zhihudaily = Zhihudaily(
-            date=int(response.json()['date']),
-            display_date=response.json()['display_date'],
-            json_news=json.dumps(handle_image(response.json()['news']))
-        )
+        if Zhihudaily.select().where(
+                Zhihudaily.date == int(given_date)).exists():
+            zhihudaily = Zhihudaily.get(Zhihudaily.date == int(given_date))
+            zhihudaily.json_news = json.dumps(
+                handle_image(response.json()['news']))
+        else:
+            zhihudaily = Zhihudaily(
+                date=int(response.json()['date']),
+                display_date=response.json()['display_date'],
+                json_news=json.dumps(handle_image(response.json()['news']))
+            )
         try:
             zhihudaily.save()
         except Exception as error:
@@ -172,7 +173,7 @@ def cli():
     \b
     - init database(deault will fetch 10 days' news)
         $ python fetch_date.py init
-    - update database(fetch yestoday's news and check data integrity)
+    - update database(fetch today's latest news and check data integrity)
         $ python fetch_date.py update
     - check data integrity, make sure we won't miss a day
         $ python fetch_date.py check <number>
@@ -191,7 +192,7 @@ def init(num):
 
 @cli.command()
 def update():
-    """fetch yestoday's news."""
+    """Fetch today's latest news and save to database."""
     crawler.daily_update()
 
 
