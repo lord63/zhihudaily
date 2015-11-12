@@ -35,6 +35,11 @@ class Date(object):
         return datetime.date.today().strftime('%Y%m%d')
 
     @property
+    def now(self):
+        """Datetime object for now."""
+        return datetime.datetime.now()
+
+    @property
     def day_before(self):
         """String format for the day before given_date."""
         return (self.date - datetime.timedelta(1)).strftime('%Y%m%d')
