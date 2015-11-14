@@ -23,8 +23,7 @@ def index():
     return render_template("index.html",
                            lists=json.loads(news.json_news),
                            display_date=news.display_date,
-                           day_before=day.day_before,
-                           is_today=True)
+                           day_before=day.day_before)
 
 
 def full_request_path():
@@ -54,5 +53,4 @@ def before(date):
                            lists=json.loads(news.json_news),
                            display_date=news.display_date,
                            day_before=day.day_before,
-                           day_after=day.day_after,
-                           is_today=False)
+                           day_after=day.day_after)

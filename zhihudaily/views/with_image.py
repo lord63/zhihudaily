@@ -24,5 +24,4 @@ def with_image():
     return render_template('with_image.html',
                            lists=json.loads(news.json_news),
                            display_date=news.display_date,
-                           day_before=day.day_before,
-                           is_today=True)
+                           day_before=day.day_before)
