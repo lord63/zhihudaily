@@ -7,7 +7,7 @@ import os
 
 from flask_script import Manager
 
-from zhihudaily import create_app
+from zhihudaily.app import create_app
 from zhihudaily.configs import DevelopConfig, ProductionConfig
 
 
