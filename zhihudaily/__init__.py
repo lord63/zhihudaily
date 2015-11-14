@@ -4,26 +4,33 @@
 from __future__ import absolute_import, unicode_literals
 
 from flask import Flask
-from zhihudaily.cache import cache
+from werkzeug.utils import import_string
+
+
+extensions = [
+    'zhihudaily.cache:cache',
+]
+
+blueprints = [
+    'zhihudaily.views.utils:utils',
+    'zhihudaily.views.index:text_ui',
+    'zhihudaily.views.with_image:image_ui',
+    'zhihudaily.views.pages:pages_ui',
+    'zhihudaily.views.three_columns:three_columns_ui',
+    'zhihudaily.views.feeds:feeds',
+]
 
 
 def create_app(config):
     app = Flask('zhihudaily')
     app.config.from_object(config)
-    cache.init_app(app)
 
-    from .views.utils import utils
-    from .views.index import text_ui
-    from .views.with_image import image_ui
-    from .views.pages import pages_ui
-    from .views.three_columns import three_columns_ui
-    from .views.feeds import feeds
+    for extention in extensions:
+        extention = import_string(extention)
+        extention.init_app(app)
 
-    app.register_blueprint(utils)
-    app.register_blueprint(text_ui)
-    app.register_blueprint(image_ui)
-    app.register_blueprint(pages_ui)
-    app.register_blueprint(three_columns_ui)
-    app.register_blueprint(feeds)
+    for blueprint in blueprints:
+        blueprint = import_string(blueprint)
+        app.register_blueprint(blueprint)
 
     return app
