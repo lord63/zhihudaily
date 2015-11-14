@@ -38,6 +38,6 @@ def image(server, hash_string):
         r = Crawler().send_request(image_url)
         buffer_image = StringIO(r.content)
         buffer_image.seek(0)
-        Config.redis_server.setex(image_url, (60*60*24*7),
+        Config.redis_server.setex(image_url, (60*60*24*4),
                                   buffer_image.getvalue())
     return send_file(buffer_image, mimetype='image/jpeg')
