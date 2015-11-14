@@ -7,13 +7,26 @@ import datetime
 import json
 import os
 from os import path
+import re
 import sys
 
 import click
 import requests
 
 from zhihudaily.models import Zhihudaily, create_tables
-from zhihudaily.utils import handle_image, get_news_info
+
+
+def handle_image(news_list):
+    """Point all the images to my server, because use zhihudaily's
+    images directly may get 403 error.
+    """
+    for news in news_list:
+        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image'])
+        if items is None:
+            continue
+        news['image'] = (
+            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(*items.groups()))
+    return news_list
 
 
 class Crawler(object):
@@ -54,20 +67,19 @@ class Crawler(object):
             delta = int(num)
         click.echo('There are {0} records to be fetched.'.format(delta))
 
-        for i in reversed(range(1, delta+1)):
+        for i in reversed(range(delta)):
             date = (self.today - datetime.timedelta(i)).strftime("%Y%m%d")
             self._save_to_database(date)
-            sys.stdout.write('\r    collect {0} records'.format(delta - i + 1))
+            sys.stdout.write('\r    collect {0} records'.format(delta - i))
             sys.stdout.flush()
         sys.stdout.write('\n')
         self.check_integrity(num)
         click.echo('Init database: done.')
 
     def daily_update(self):
-        """Fetch yestoday's news and save to database."""
-        click.echo("Adding yestoday's news to database...")
-        yestoday = (self.today - datetime.timedelta(1)).strftime("%Y%m%d")
-        self._save_to_database(yestoday)
+        """Fetch today's latest news and save to database."""
+        click.echo("Update today's news in database...")
+        self._save_to_database(self.today.strftime("%Y%m%d"))
         click.echo("Update database: done.")
         self.check_integrity()
 
@@ -98,7 +110,7 @@ class Crawler(object):
 
         date_in_real = [
             int((self.today - datetime.timedelta(i)).strftime("%Y%m%d"))
-            for i in range(1, delta+1)
+            for i in range(delta)
         ]
         missed_date = set(date_in_real) - set(date_in_db)
         for date in missed_date:
@@ -111,16 +123,21 @@ class Crawler(object):
 
         :param given_date: string type, e.g. '20151106'.
         """
+        response = self._send_request(given_date)
+        if response is None:
+            return
+
         if Zhihudaily.select().where(
                 Zhihudaily.date == int(given_date)).exists():
-            click.echo('{0} already in our database, skip.'.format(given_date))
-            return
-        response_json = self._send_request(given_date)
-        if response_json is None:
-            return
-        display_date, date, news_list = get_news_info(response_json)
-        zhihudaily = Zhihudaily(date=int(date), display_date=display_date,
-                                json_news=json.dumps(handle_image(news_list)))
+            zhihudaily = Zhihudaily.get(Zhihudaily.date == int(given_date))
+            zhihudaily.json_news = json.dumps(
+                handle_image(response.json()['news']))
+        else:
+            zhihudaily = Zhihudaily(
+                date=int(response.json()['date']),
+                display_date=response.json()['display_date'],
+                json_news=json.dumps(handle_image(response.json()['news']))
+            )
         try:
             zhihudaily.save()
         except Exception as error:
@@ -156,7 +173,7 @@ def cli():
     \b
     - init database(deault will fetch 10 days' news)
         $ python fetch_date.py init
-    - update database(fetch yestoday's news and check data integrity)
+    - update database(fetch today's latest news and check data integrity)
         $ python fetch_date.py update
     - check data integrity, make sure we won't miss a day
         $ python fetch_date.py check <number>
@@ -175,7 +192,7 @@ def init(num):
 
 @cli.command()
 def update():
-    """fetch yestoday's news."""
+    """Fetch today's latest news and save to database."""
     crawler.daily_update()
 
 
