@@ -10,7 +10,7 @@ import redis
 
 
 class Config(object):
-    db = path.join(path.abspath(path.dirname(__file__)), 'zhihudaily.db')
+    db = path.join(path.dirname(path.realpath(__file__)), 'zhihudaily.db')
     database = SqliteDatabase(db)
     redis_server = redis.StrictRedis(host='localhost', port=6379)
 

@@ -14,6 +14,7 @@ import click
 import requests
 
 from zhihudaily.models import Zhihudaily, create_tables
+from zhihudaily.configs import Config
 
 
 def handle_image(news_list):
@@ -49,14 +50,12 @@ class Crawler(object):
                     string 'all' means fetch all the news start from 20130519.
         """
         click.echo("Init the database...")
-        database_path = path.join(path.dirname(path.realpath(__file__)),
-                                  'zhihudaily/zhihudaily.db')
-        if path.exists(database_path):
+        if path.exists(Config.db):
             confirm = click.prompt(
                 "Already exists a database, continue by removing it? [Y/n]",
                 default='Y', show_default=False)
             if confirm == 'Y':
-                os.remove(database_path)
+                os.remove(Config.db)
             else:
                 sys.exit('Keep the database and abort.')
         create_tables()
