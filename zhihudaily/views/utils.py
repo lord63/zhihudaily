@@ -8,7 +8,7 @@ from StringIO import StringIO
 from flask import send_file, g, Blueprint
 
 from zhihudaily.configs import Config
-from zhihudaily.utils import make_request
+from zhihudaily.crawler import Crawler
 
 
 utils = Blueprint('utils', __name__)
@@ -35,7 +35,7 @@ def image(server, hash_string):
         buffer_image = StringIO(cached)
         buffer_image.seek(0)
     else:
-        r = make_request(image_url)
+        r = Crawler().send_request(image_url)
         buffer_image = StringIO(r.content)
         buffer_image.seek(0)
         Config.redis_server.setex(image_url, (60*60*24*7),

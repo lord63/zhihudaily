@@ -6,8 +6,9 @@ from __future__ import absolute_import, unicode_literals
 from flask import render_template, jsonify, Blueprint, json
 
 from zhihudaily.models import Zhihudaily
-from zhihudaily.utils import make_request, Date
+from zhihudaily.utils import Date
 from zhihudaily.cache import cache
+from zhihudaily.crawler import Crawler
 
 
 three_columns_ui = Blueprint('three_columns_ui', __name__,
@@ -44,5 +45,5 @@ def append_date(date):
 @three_columns_ui.route('/three-columns/contents/<id>')
 @cache.cached(timeout=10800)
 def get_content(id):
-    r = make_request('http://news-at.zhihu.com/api/4/news/' + id)
+    r = Crawler().send_request('http://news-at.zhihu.com/api/4/news/' + id)
     return jsonify(body=r.json()['body'])

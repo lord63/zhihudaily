@@ -8,11 +8,11 @@ from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import request, Blueprint, json
 
-
 from zhihudaily.cache import cache
 from zhihudaily.configs import Config
 from zhihudaily.models import Zhihudaily
-from zhihudaily.utils import Date, make_request
+from zhihudaily.utils import Date
+from zhihudaily.crawler import Crawler
 
 
 feeds = Blueprint('feeds', __name__, template_folder='templates')
@@ -32,7 +32,7 @@ def generate_feed():
         if redis_server.get(article['url']):
             body = redis_server.get(article['url']).decode('utf-8')
         else:
-            body = make_request(article['url']).json()['body']
+            body = Crawler().send_request(article['url']).json()['body']
             redis_server.setex(article['url'], (60*60*24), body)
         feed.add(article['title'], body,
                  content_type='html',
