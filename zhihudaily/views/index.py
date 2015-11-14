@@ -48,7 +48,7 @@ def before(date):
 
     template_name = {
         'False': 'index.html', 'True': 'with_image.html'
-    }.get(request.args['image'], 'False')
+    }[request.args.get('image', 'False')]
 
     return render_template(template_name,
                            lists=json.loads(news.json_news),
