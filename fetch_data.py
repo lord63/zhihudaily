@@ -122,7 +122,7 @@ class Crawler(object):
 
         :param given_date: string type, e.g. '20151106'.
         """
-        response = self._send_request(given_date)
+        response = self._get_news(given_date)
         if response is None:
             return
 
@@ -130,34 +130,49 @@ class Crawler(object):
                 Zhihudaily.date == int(given_date)).exists():
             zhihudaily = Zhihudaily.get(Zhihudaily.date == int(given_date))
             zhihudaily.json_news = json.dumps(
-                handle_image(response.json()['news']))
+                handle_image(response['news']))
         else:
             zhihudaily = Zhihudaily(
-                date=int(response.json()['date']),
-                display_date=response.json()['display_date'],
-                json_news=json.dumps(handle_image(response.json()['news']))
+                date=int(response['date']),
+                display_date=response['display_date'],
+                json_news=json.dumps(handle_image(response['news']))
             )
         try:
             zhihudaily.save()
         except Exception as error:
             click.echo("Fail to save to database: {0}".format(error.args[0]))
 
-    def _send_request(self, date):
-        """Send request to zhihudaily's API server, return the response.
+    def _get_news(self, date):
+        """Get news on the specified day, return the response json.
 
-        :param date: strint type, get news on that day, e.g. '20151106'.
+        :param date: string type, get news on that day, e.g. '20151106'.
         """
-
         date_in_datetime = datetime.date(
             int(date[0:4]), int(date[4:6]), int(date[6:8]))
         # Since the API is before/<date>, news on 20130519 should use
         # before/20130520, so we should use the day after it.
         date_after = (
             date_in_datetime + datetime.timedelta(1)).strftime("%Y%m%d")
+        request_url = (
+            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
+                 date_after))
+        response = self.send_request(request_url)
+        if response:
+            return response.json()
+        return response
+
+    def send_request(self, url):
+        """Send request to zhihudaily's API server, return the response.
+
+        :param url: string type, the request url.
+        """
+        # TODO: better way to handle the exception.
+        # It's not bad when you fetch news and save to the database,
+        # but this function will also be used in three-columns ui when
+        # get the article content and in utils blueprint when you get
+        # the iamges. How to make it suitable for all of them?
         try:
-            response = self.session.get(
-                'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
-                    date_after))
+            response = self.session.get(url)
         except requests.exceptions.RequestException as error:
             click.echo("Fail to send the request: {0}".format(error.args[0]))
             return None
