@@ -13,10 +13,10 @@ from zhihudaily.cache import cache
 pages_ui = Blueprint('pages_ui', __name__, template_folder='templates')
 
 
-@pages_ui.route('/pages')
+@pages_ui.route('/pages', defaults={'page': 1})
 @pages_ui.route('/pages/<int:page>')
 @cache.cached(timeout=900)
-def pages(page=1):
+def pages(page):
     """The page the 分页 UI."""
     db_news_list = (Zhihudaily.select()
                               .order_by(Zhihudaily.date.desc())
