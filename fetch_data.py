@@ -39,7 +39,7 @@ def update():
 
 
 @cli.command()
-@click.argument('date_range', type=int)
+@click.argument('date_range')
 def check(date_range):
     """check data integrity."""
     crawler.check_integrity(date_range)
