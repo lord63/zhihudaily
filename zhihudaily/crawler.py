@@ -129,18 +129,14 @@ class Crawler(object):
         if Zhihudaily.select().where(
                 Zhihudaily.date == int(given_date)).exists():
             zhihudaily = Zhihudaily.get(Zhihudaily.date == int(given_date))
-            zhihudaily.json_news = json.dumps(
-                handle_image(response['news']))
+            zhihudaily.json_news = json.dumps(handle_image(response['news']))
+            zhihudaily.save()
         else:
-            zhihudaily = Zhihudaily(
+            zhihudaily = Zhihudaily.create(
                 date=int(response['date']),
                 display_date=response['display_date'],
                 json_news=json.dumps(handle_image(response['news']))
             )
-        try:
-            zhihudaily.save()
-        except Exception as error:
-            click.echo("Fail to save to database: {0}".format(error.args[0]))
 
     def _get_news(self, date):
         """Get news on the specified day, return the response json.
