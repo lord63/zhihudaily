@@ -32,9 +32,8 @@ def handle_image(news_list):
 
 class Crawler(object):
     def __init__(self):
-        # Zhihudaily's birthday is 20130519, but the url should be
-        # http://news.at.zhihu.com/api/1.2/news/before/20130520.
-        self.birthday = datetime.date(2013, 5, 20)
+        # Zhihudaily's birthday is 20130519.
+        self.birthday = datetime.date(2013, 5, 19)
         self.today = datetime.date.today()
 
         self.session = requests.Session()
@@ -61,7 +60,7 @@ class Crawler(object):
         create_tables()
 
         if num == 'all':
-            delta = (self.today - self.birthday).days
+            delta = (self.today - self.birthday).days + 1
         else:
             delta = int(num)
         click.echo('There are {0} records to be fetched.'.format(delta))
@@ -102,7 +101,7 @@ class Crawler(object):
             date_in_db = [
                 news.date for news in Zhihudaily.select(Zhihudaily.date)
             ]
-            delta = (self.today - self.birthday).days
+            delta = (self.today - self.birthday).days + 1
         else:
             raise TypeError("Bad parameter date_range, "
                             "should be an integer or string value 'all'.")
