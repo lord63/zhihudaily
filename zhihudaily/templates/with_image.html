@@ -13,11 +13,13 @@
   {% endfor %}
   </div>
   <nav>
+    {% if day_before|int >= 20130519 %}
     <ul class="nav nav-pills pull-left">
       <li role="presentation">
         <a href="{{ url_for('text_ui.before', date=day_before, image=True) }}"><<< Previous</a>
       </li>
     </ul>
+    {% endif %}
     {% if day_after %}
     <ul class="nav nav-pills pull-right">
       <li role="presentation">
