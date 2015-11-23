@@ -26,8 +26,8 @@ def cli():
 
 
 @cli.command()
-@click.option('--num', '-n', default=10)
-def init(num):
+@click.option('--num', '-n')
+def init(num=10):
     """init database."""
     crawler.init_database(num)
 
