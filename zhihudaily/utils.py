@@ -3,37 +3,45 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import re
-
-import requests
-
-from zhihudaily.cache import cache
+import datetime
 
 
-@cache.memoize(timeout=1200)
-def make_request(url):
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
-                            x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'})
-    r = session.get(url)
-    return r
+class Date(object):
+    def __init__(self, date_string=''):
+        if not date_string:
+            self.date = datetime.date.today()
+        else:
+            self.date = datetime.datetime.strptime(date_string, '%Y%m%d')
 
+    @property
+    def today(self):
+        """
+        String format for today. It's a convenient way to get string
+        format for today even if the given_date is not today.
+        """
+        return datetime.date.today().strftime('%Y%m%d')
 
-def get_news_info(response):
-    display_date = response.json()['display_date']
-    date = response.json()['date']
-    news_list = response.json()['news']
-    return display_date, date, news_list
+    @property
+    def now(self):
+        """Datetime object for now."""
+        return datetime.datetime.now()
 
+    @property
+    def day_before(self):
+        """String format for the day before given_date."""
+        return (self.date - datetime.timedelta(1)).strftime('%Y%m%d')
 
-def handle_image(news_list):
-    """Point all the images to my server, because use zhihudaily's
-    images directly may get 403 error.
-    """
-    for news in news_list:
-        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image'])
-        if items is None:
-            continue
-        news['image'] = (
-            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(*items.groups()))
-    return news_list
+    @property
+    def day_after(self):
+        """String format for the day after given_date."""
+        return (self.date + datetime.timedelta(1)).strftime('%Y%m%d')
+
+    # It's for three-columns ui, in the future we may implementation
+    # it with javascript.
+    def date_range(self, num):
+        """Return a string format date list according to the range num."""
+        date_range = [
+            (self.date - datetime.timedelta(i)).strftime('%Y%m%d')
+            for i in range(num)
+        ]
+        return date_range
