@@ -1,6 +1,26 @@
+### 2015.11.14 - 2015.11.23
+
+日报第二次重构完成，减少冗余代码，增加复用，理清了下逻辑 [#34](https://github.com/lord63/zhihudaily/pull/34)
+
+### 2015.11.11 - 2015.11.12
+
+全面切换到使用数据库, 第二次重构的一部分 [#33](https://github.com/lord63/zhihudaily/pull/33)
+
+### 2015.11.05 - 2015.11.07
+
+重构了获取数据的脚本 [#25](https://github.com/lord63/zhihudaily/pull/25)
+
+### 2015.10.28 - 2015.10.29
+
+图片 UI 和文字 UI 之前的新闻切换到使用数据库而不是直接向日报发请求 [#24](https://github.com/lord63/zhihudaily/pull/24)
+
+### 2015.10.25
+
+增加了 cache [#17](https://github.com/lord63/zhihudaily/pull/17)
+
 ### 2015.04.29
 
-* 对于 zhihudaily 进行首次重构, 于 05.05 完成，详情见 <https://github.com/lord63/zhihudaily/pull/18>
+* 对于 zhihudaily 进行首次重构, 于 05.05 完成，详情见 [#18](https://github.com/lord63/zhihudaily/pull/18)
 
 ### 2015.04.28
 
@@ -16,7 +36,7 @@
 
 ### 2015.03.17-2015.04.17
 
-* 三栏 UI 实现具体过程详见 <https://github.com/lord63/zhihudaily/pull/12>
+* 三栏 UI 实现具体过程详见 [#12](https://github.com/lord63/zhihudaily/pull/12)
 
 ### 2015.03.16
 
@@ -67,7 +87,7 @@
 
 ### 2015.02.14
 
-* 提高了点新闻标题的可读性 #2
+* 提高了点新闻标题的可读性 [#2](https://github.com/lord63/zhihudaily/pull/2)
 * 更改了 header，抄了知乎日报的 header
 
 ### 2015.02.13
