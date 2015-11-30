@@ -18,7 +18,7 @@ text_ui = Blueprint('text_ui', __name__, template_folder='templates')
 def index():
     """The index page, for 文字 UI."""
     day = Date()
-    news = Zhihudaily.get(Zhihudaily.date == int(day.today))
+    news = Zhihudaily.get(Zhihudaily.date == day.today)
 
     return render_template("index.html",
                            lists=json.loads(news.json_news),
@@ -37,13 +37,13 @@ def before(date):
     """For 文字 UI and 图片 UI, before today."""
 
     day = Date(date)
-    if int(day.today) <= int(date):
+    if day.today <= date:
         if request.args.get('image', 'False') == 'True':
             return redirect(url_for('image_ui.with_image'))
         else:
             return redirect(url_for('text_ui.index'))
 
-    news = Zhihudaily.get(Zhihudaily.date == int(date))
+    news = Zhihudaily.get(Zhihudaily.date == date)
 
     template_name = {
         'False': 'index.html', 'True': 'with_image.html'
