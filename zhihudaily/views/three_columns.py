@@ -28,7 +28,7 @@ def three_columns():
 @cache.cached(timeout=900)
 def show_titles(date):
     """Get titles via AJAX."""
-    news = Zhihudaily.get(Zhihudaily.date == int(date))
+    news = Zhihudaily.get(Zhihudaily.date == date)
     json_news = json.loads(news.json_news)
     return jsonify(news=json_news)
 
