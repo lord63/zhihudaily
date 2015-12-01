@@ -19,7 +19,7 @@ image_ui = Blueprint('image_ui', __name__, template_folder='templates')
 def with_image():
     """The page for 图片 UI."""
     day = Date()
-    news = Zhihudaily.get(Zhihudaily.date == int(day.today))
+    news = Zhihudaily.get(Zhihudaily.date == day.today)
 
     return render_template('with_image.html',
                            lists=json.loads(news.json_news),

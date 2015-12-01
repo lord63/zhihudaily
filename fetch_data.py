@@ -17,8 +17,8 @@ def cli():
         $ python fetch_date.py init
     - update database(fetch today's latest news and check data integrity)
         $ python fetch_date.py update
-    - check data integrity, make sure we won't miss a day
-        $ python fetch_date.py check <number>
+    - check data integrity, make sure we won't miss a day(default check 10 days)
+        $ python fetch_date.py check
 
     get more detailed info for each subcommand via <subcommand --help>
     """
@@ -26,10 +26,19 @@ def cli():
 
 
 @cli.command()
-@click.option('--num', '-n')
-def init(num=10):
-    """init database."""
-    crawler.init_database(num)
+@click.option('--num', '-n', default=10)
+@click.option('--all', is_flag=True)
+def init(num, all):
+    """init database.
+
+    \b
+    :param num: int, the number of daily news to fetch.
+    :param all: boolean, fetch all the news or not.
+    """
+    if all:
+        crawler.init_database('all')
+    else:
+        crawler.init_database(num)
 
 
 @cli.command()
@@ -39,10 +48,19 @@ def update():
 
 
 @cli.command()
-@click.argument('date_range')
-def check(date_range):
-    """check data integrity."""
-    crawler.check_integrity(date_range)
+@click.option('--range', '-r', default=10)
+@click.option('--all', is_flag=True)
+def check(range, all):
+    """check data integrity.
+
+    \b
+    :param range: int, the range of days to check
+    :param all: boolean, check all the data integrity or not.
+    """
+    if all:
+        crawler.check_integrity('all')
+    else:
+        crawler.check_integrity(range)
 
 
 if __name__ == '__main__':

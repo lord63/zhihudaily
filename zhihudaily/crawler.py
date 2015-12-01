@@ -20,6 +20,9 @@ from zhihudaily.configs import Config
 def handle_image(news_list):
     """Point all the images to my server, because use zhihudaily's
     images directly may get 403 error.
+
+    :param news_list: list type, a list of news,
+                      something like [news_dict, news_dict...]
     """
     for news in news_list:
         items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image'])
@@ -41,7 +44,7 @@ class Crawler(object):
             {'User-Agent': ("Mozilla/5.0 (X11; Ubuntu; Linux "
                             "x86_64; rv:28.0) Gecko/20100101 Firefox/28.0")})
 
-    def init_database(self, num=10):
+    def init_database(self, num):
         """Init the database and fetch news.
 
         :param num: int number or string 'all'.
@@ -62,7 +65,7 @@ class Crawler(object):
         if num == 'all':
             delta = (self.today - self.birthday).days + 1
         else:
-            delta = int(num)
+            delta = num
         click.echo('There are {0} records to be fetched.'.format(delta))
 
         for i in reversed(range(delta)):
@@ -79,9 +82,9 @@ class Crawler(object):
         click.echo("Update today's news in database...")
         self._save_to_database(self.today.strftime("%Y%m%d"))
         click.echo("Update database: done.")
-        self.check_integrity()
+        self.check_integrity(10)
 
-    def check_integrity(self, date_range=10):
+    def check_integrity(self, date_range):
         """Check data integrity, make sure we won't miss a day
 
         :param date_range: int number or 'all'.
@@ -107,7 +110,7 @@ class Crawler(object):
                             "should be an integer or string value 'all'.")
 
         date_in_real = [
-            int((self.today - datetime.timedelta(i)).strftime("%Y%m%d"))
+            (self.today - datetime.timedelta(i)).strftime("%Y%m%d")
             for i in range(delta)
         ]
         missed_date = set(date_in_real) - set(date_in_db)
@@ -126,13 +129,13 @@ class Crawler(object):
             return
 
         if Zhihudaily.select().where(
-                Zhihudaily.date == int(given_date)).exists():
-            zhihudaily = Zhihudaily.get(Zhihudaily.date == int(given_date))
+                Zhihudaily.date == given_date).exists():
+            zhihudaily = Zhihudaily.get(Zhihudaily.date == given_date)
             zhihudaily.json_news = json.dumps(handle_image(response['news']))
             zhihudaily.save()
         else:
-            zhihudaily = Zhihudaily.create(
-                date=int(response['date']),
+            Zhihudaily.create(
+                date=response['date'],
                 display_date=response['display_date'],
                 json_news=json.dumps(handle_image(response['news']))
             )

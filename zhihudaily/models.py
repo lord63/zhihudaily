@@ -3,7 +3,7 @@
 
 from __future__ import absolute_import, unicode_literals
 
-from peewee import Model, IntegerField, CharField
+from peewee import Model, CharField
 
 from zhihudaily.configs import Config
 
@@ -14,11 +14,11 @@ class BaseModel(Model):
 
 
 class Zhihudaily(BaseModel):
-    date = IntegerField()
+    date = CharField()
     json_news = CharField()
     display_date = CharField()
 
 
 def create_tables():
     Config.database.connect()
-    Config.database.create_tables([Zhihudaily])
+    Config.database.create_table(Zhihudaily)
