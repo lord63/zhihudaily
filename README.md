@@ -5,7 +5,6 @@ Yet another web application for Zhihu daily which is powered by Flask.
 ## Features
 
 * has several UIs, including text UI, image UI, pages UI and three columns UI
-* support RSS feed
 
 ## QuickStart
 

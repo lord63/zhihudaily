@@ -1,3 +1,12 @@
+### 2015.11.29 - 2015.12.01
+
+* date 字段由 IntegerField 改为 CharField，使用起来更加方便一些，见 [#29](https://github.com/lord63/zhihudaily/issue/29)
+* 修复了脚本的几个小错误 _(:3
+
+### 2015.11.29
+
+去掉首页的 feeds 链接，感觉 feeds 很鸡肋，而且反应速度又很慢
+
 ### 2015.11.14 - 2015.11.23
 
 日报第二次重构完成，减少冗余代码，增加复用，理清了下逻辑 [#34](https://github.com/lord63/zhihudaily/pull/34)
