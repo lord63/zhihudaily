@@ -36,7 +36,8 @@ def init(num, all):
     """
     if all:
         crawler.init_database('all')
-    crawler.init_database(num)
+    else:
+        crawler.init_database(num)
 
 
 @cli.command()
@@ -56,7 +57,8 @@ def check(range, all):
     """
     if all:
         crawler.check_integrity('all')
-    crawler.check_integrity(range)
+    else:
+        crawler.check_integrity(range)
 
 
 if __name__ == '__main__':
