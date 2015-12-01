@@ -31,6 +31,7 @@ def cli():
 def init(num, all):
     """init database.
 
+    \b
     :param num: int, the number of daily news to fetch.
     :param all: boolean, fetch all the news or not.
     """
@@ -52,6 +53,7 @@ def update():
 def check(range, all):
     """check data integrity.
 
+    \b
     :param range: int, the range of days to check
     :param all: boolean, check all the data integrity or not.
     """
