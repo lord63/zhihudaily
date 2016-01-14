@@ -29,7 +29,7 @@ def after_request(response):
 @utils.route('/img/<server>/<path:hash_string>')
 def image(server, hash_string):
     """Handle image, use redis to cache image."""
-    image_url = 'http://{0}.zhimg.com/{1}'.format(server, hash_string)
+    image_url = 'https://{0}.zhimg.com/{1}'.format(server, hash_string)
     cached = Config.redis_server.get(image_url)
     if cached:
         buffer_image = StringIO(cached)
