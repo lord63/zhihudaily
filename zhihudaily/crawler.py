@@ -29,7 +29,7 @@ def handle_image(news_list):
         if items is None:
             continue
         news['image'] = (
-            'http://zhihudaily.lord63.com/img/{0}/{1}'.format(*items.groups()))
+            'https://zhihudaily.lord63.com/img/{0}/{1}'.format(*items.groups()))
     return news_list
 
 
