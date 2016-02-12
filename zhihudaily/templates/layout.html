@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>知乎日报</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" aria-controls="navbar" data-target="#hd-nav" data-toggle="collapase">
+            <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+          </button>
+          <h3 id="logo">知乎日报</h3>
+        </div>
+        <div id="hd-nav" class="navbar-collapse collapse" aria-expanded="false">
+          <ul class="nav navbar-nav navbar-right text-center">
+            {{ nav_link('text_ui.index', '文字 UI') }}
+            {{ nav_link('image_ui.with_image', '图片 UI') }}
+            {{ nav_link('pages_ui.pages', '分页 UI') }}
+            {{ nav_link('three_columns_ui.three_columns', '三栏 UI') }}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
