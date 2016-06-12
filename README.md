@@ -14,6 +14,7 @@ clone the source code:
 
 set up the development environment, virtualenv is recommended:
 
+    $ sudo apt-get install python-virtualenv
     $ virtualenv venv
     $ . venv/bin/activate
     $ pip install -r requirements.txt
