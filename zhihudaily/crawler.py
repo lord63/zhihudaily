@@ -152,7 +152,7 @@ class Crawler(object):
         date_after = (
             date_in_datetime + datetime.timedelta(1)).strftime("%Y%m%d")
         request_url = (
-            'http://news.at.zhihu.com/api/1.2/news/before/{0}'.format(
+            'https://news-at.zhihu.com/api/1.2/news/before/{0}'.format(
                  date_after))
         response = self.send_request(request_url)
         if response:
