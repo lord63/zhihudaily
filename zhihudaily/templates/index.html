@@ -6,15 +6,17 @@
       <h3 class="text-center">{{ display_date }}</h3>
     </div>
   </div>
-  <div class="list-group">
+  <ul class="list-group">
     {% for item in lists %}
+    <li class="list-group-item">
       <div class="row ">
         <div class="col-md-offset-3 col-md-6 col-xs-12">
-          <a href={{ item['share_url'] }} class="list-group-item">{{ item['title'] }}</a>
+          <a href={{ item['share_url'] }} class="">{{ item['title'] }}</a>
         </div>
       </div>
+    </li>
     {% endfor %}
-  </div>
+  </ul>
   <div class="row">
     <div class="col-md-offset-3 col-md-6 col-xs-12">
       {% if day_before >= '20130519' %}
