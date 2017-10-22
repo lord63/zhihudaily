@@ -67,3 +67,5 @@ temp/
 # database
 *.db
 *.rdb
+
+*.DS_Store
