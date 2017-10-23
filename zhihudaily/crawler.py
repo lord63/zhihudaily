@@ -25,7 +25,7 @@ def handle_image(news_list):
                       something like [news_dict, news_dict...]
     """
     for news in news_list:
-        items = re.search(r'(?<=http://)(.*?)\.zhimg.com/(.*)$', news['image'])
+        items = re.search(r'(?<=https://)(.*?)\.zhimg.com/(.*)$', news['image'])
         if items is None:
             continue
         news['image'] = (
