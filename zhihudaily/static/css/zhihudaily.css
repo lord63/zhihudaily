@@ -2,10 +2,24 @@
     margin-bottom: 0px;
 }
 
+/* set height so some long title can display well one small device */
 .thumbnail .caption {
     height: 70px;
 }
 
+/* add margin top for footer */
+.footer p {
+    margin: 10px 0 0 10px;
+}
+
+/* remove padding left and pading right for the second column in three column ui */
+.title-col {
+    padding: 0;
+}
+
+/*                      */
+/* 以下都是三栏ui相关的css */
+/*                      */
 
 /* 三栏 UI 第一第二栏的滚动 */
 .stroll-list ul {
