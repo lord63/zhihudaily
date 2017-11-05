@@ -27,8 +27,10 @@
     </div>
   </div>
 </div>
-<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/lib/stroll.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lib/jquery.isloading.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
+{% endblock %}
+{% block js %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/lib/stroll.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/lib/jquery.isloading.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
 {% endblock %}

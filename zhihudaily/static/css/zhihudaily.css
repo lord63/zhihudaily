@@ -5,3 +5,82 @@
 .thumbnail .caption {
     height: 70px;
 }
+
+
+/* 三栏 UI 第一第二栏的滚动 */
+.stroll-list ul {
+    position: relative;
+    height: 530px;   /*TODO choose a height or use another way*/
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    list-style: none;
+  
+    -webkit-perspective: 700px;
+     -moz-perspective: 700px;
+    -ms-perspective: 700px;
+     -o-perspective: 700px;
+    perspective: 700px;
+  }
+  
+  .stroll-list ul li {
+    position: relative;
+    padding: 10px;
+    background: #eee;
+    color: #252525;
+    font-size: 18px;
+    z-index: 2;
+    -webkit-transform: translateZ(0px);
+     -moz-transform: translateZ(0px);
+    -ms-transform: translateZ(0px);
+     -o-transform: translateZ(0px);
+    transform: translateZ(0px);
+  }
+  
+  .stroll-list ul li:nth-child(odd) {
+    background: #fff;
+  }
+  
+  .stroll-list div {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* 三栏 UI 的第三栏-新闻内容的显示 */
+  .three-column-content {
+    height: 530px;
+    overflow: scroll;
+    margin-right: 10px;
+  }
+  
+  /* 三栏 UI new content 去掉有右边的 padding */
+  .container-fluid {
+      padding-right: 0px;
+  }
+  .container-fluid .col-md-6 {
+      padding-right: 0px;
+  }
+  
+  /* CSS spinner animation */
+  .isloading-wrapper.isloading-right {
+      margin-left:10px;
+  }
+  
+  .isloading-overlay {
+      position:relative;text-align:center;
+  }
+  .isloading-overlay .isloading-wrapper {
+      background:#FFFFFF;
+      -webkit-border-radius:7px;
+      -webkit-background-clip:padding-box;
+      -moz-border-radius:7px;
+      -moz-background-clip:padding;
+      border-radius:7px;
+      background-clip:padding-box;
+      display:inline-block;
+      margin:0 auto;
+      padding:10px 20px;
+      top:10%;
+      z-index:9000;
+  }
