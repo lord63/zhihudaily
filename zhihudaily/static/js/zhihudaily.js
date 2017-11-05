@@ -19,18 +19,18 @@ $('.load').on('click', function(){
 
 // Click the date and show the news titles.
 // Event binding on dynamically elements：
-// http://stackoverflow.com/a/6658774 and http://stackoverflow.com/a/1207393
+// https://stackoverflow.com/a/6658774 and https://stackoverflow.com/a/1207393
 $('.three-column-day').on('click', 'a.days', function(event) {
   event.preventDefault();
   $.getJSON($(this).attr('href'), function(resp) {
     $('.three-column-title li').remove();
-    // http://goo.gl/fRKpMD
+    // https://goo.gl/fRKpMD
     var news = resp.news;
     var textToInsert = [];
     var length = news.length;
     var i = 0;
     for (var a = 0; a < length; a += 1) {
-//      textToInsert[i++] = '<li><a href="http://news-at.zhihu.com/api/4/news/';
+//      textToInsert[i++] = '<li><a href="https://news-at.zhihu.com/api/4/news/';
       textToInsert[i++] = '<li><a href="/three-columns/contents/';
       textToInsert[i++] = news[a]['id'];
       textToInsert[i++] = '" class="titles">';
