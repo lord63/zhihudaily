@@ -10,7 +10,7 @@
         <div class="thumbnail">
           <a href="{{ item['share_url'] }}"><img src="{{ item['image'] }}" class="img-responsive"></a>
           <div class="caption">
-            <p>{{ item['title'] | truncate(25, False) }}</p>
+            <p>{{ item['title'] | truncate(25, True) }}</p>
           </div>
         </div>
       </div>
