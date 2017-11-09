@@ -33,4 +33,8 @@ def create_app(config):
         blueprint = import_string(blueprint)
         app.register_blueprint(blueprint)
 
+    @app.context_processor
+    def inject_statics():
+        return dict(debug=config.DEBUG)
+
     return app
