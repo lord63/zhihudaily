@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from flask import render_template, Blueprint, json
-from flask.ext.paginate import Pagination
+from flask_paginate import Pagination
 
 from zhihudaily.models import Zhihudaily
 from zhihudaily.cache import cache

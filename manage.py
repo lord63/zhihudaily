@@ -5,19 +5,13 @@ from __future__ import absolute_import
 
 import os
 
-from flask_script import Manager
+import click
 
 from zhihudaily.app import create_app
 from zhihudaily.configs import DevelopConfig, ProductionConfig
 
 
-if os.environ.get('Flask_APP') == 'production':
-    app = create_app(ProductionConfig)
-else:
-    app = create_app(DevelopConfig)
 
-manager = Manager(app)
-
-
-if __name__ == '__main__':
-    manager.run()
+CONFIG = (ProductionConfig if os.environ.get('FLASK_APP_ENV') == 'production'
+          else DevelopConfig)
+app = create_app(CONFIG)
