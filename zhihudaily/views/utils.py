@@ -3,12 +3,11 @@
 
 from __future__ import absolute_import
 
-from StringIO import StringIO
-
 from flask import send_file, g, Blueprint
 
 from zhihudaily.configs import Config
 from zhihudaily.crawler import Crawler
+from zhihudaily._compat import StringIO
 
 
 utils = Blueprint('utils', __name__)
