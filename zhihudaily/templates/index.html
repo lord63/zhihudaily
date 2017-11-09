@@ -1,29 +1,40 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="container">
-  <div class="col-md-offset-3">
-  <ul>
-    <h3>{{ display_date }}</h3>
-    {% for item in lists %}
-    <h4><a href={{ item['share_url'] }}>{{ item['title'] }}</a></h4>
-    {% endfor %}
-  </ul>
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6 col-xs-12">
+      <h3 class="text-center">{{ display_date }}</h3>
+    </div>
   </div>
-  <nav >
-    {% if day_before >= '20130519' %}
-    <ul class="nav nav-pills pull-left">
-      <li role="presentation">
-        <a href="{{ url_for('text_ui.before', date=day_before, image=False) }}"><<< Previous</a>
-      </li>
-    </ul>
-    {% endif %}
-    {% if day_after %}
-    <ul class="nav nav-pills pull-right">
-      <li role="presentation">
-        <a href="{{ url_for('text_ui.before', date=day_after, image=False) }}">Next >>></a>
-      </li>
-    </ul>
-    {% endif %}
-  </nav>
+  <div class="row ">
+    <div class="col-md-offset-3 col-md-6 col-xs-12">
+      <ul class="list-group">
+        {% for item in lists %}
+        <li class="list-group-item">
+              <a href={{ item['share_url'] }} class="">{{ item['title'] }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6 col-xs-12">
+      {% if day_before >= '20130519' %}
+      <ul class="nav nav-pills pull-left">
+        <li role="presentation">
+          <a href="{{ url_for('text_ui.before', date=day_before, image=False) }}"><<< Previous</a>
+        </li>
+      </ul>
+      {% endif %}
+      {% if day_after %}
+      <ul class="nav nav-pills pull-right">
+        <li role="presentation">
+          <a href="{{ url_for('text_ui.before', date=day_after, image=False) }}">Next >>></a>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock %}

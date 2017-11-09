@@ -22,7 +22,7 @@ redis_server = Config.redis_server
 @feeds.route('/feeds')
 @cache.cached(timeout=1200)
 def generate_feed():
-    """Code snippet from http://flask.pocoo.org/snippets/10/"""
+    """Code snippet from https://flask.pocoo.org/snippets/10/"""
     day = Date()
     feed = AtomFeed('Zhihudaily', feed_url=request.url, url=request.url_root)
     news = Zhihudaily.get(Zhihudaily.date == int(day.today))

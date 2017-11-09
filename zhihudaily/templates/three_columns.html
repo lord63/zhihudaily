@@ -5,30 +5,35 @@
   {{ super() }}
 {% endblock %}
 {% block body %}
-<div class="container-fluid">
-  <div class="stroll-list">
+<div class="container">
+  <div class="row">
     <div class="col-md-2">
-      <ul class="wave three-column-day">
-        {% for day in days %}
-        <li><a href="/three-columns/{{ day }}" class="days">{{ day }}</a></li>
-        {% endfor %}
-        <li class="load">Load More</li>
-      </ul>
+      <div class="stroll-list">
+        <ul class="wave three-column-day">
+          {% for day in days %}
+          <li><a href="/three-columns/{{ day }}" class="days">{{ day }}</a></li>
+          {% endfor %}
+          <li class="load">Load More</li>
+        </ul>
+      </div>
     </div>
-
-    <div class="col-md-4">
-      <ul class="three-column-title"></ul>
+    <div class="col-md-4 title-col">
+      <div class="stroll-list">
+        <ul class="three-column-title"></ul>
+      </div> 
     </div>
-  </div>
-
-  <div class="col-md-6">
-    <div class="three-column-content">
-      <div class="main-wrap content-wrap"></div>
+    <div class="col-md-6">
+        <div class="three-column-content">
+          <div class="main-wrap content-wrap"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/lib/stroll.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lib/jquery.isloading.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
+{% endblock %}
+{% block js %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/lib/stroll.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/lib/jquery.isloading.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/zhihudaily.js')  }}"></script>
 {% endblock %}

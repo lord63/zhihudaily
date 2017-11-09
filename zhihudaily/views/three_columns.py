@@ -45,5 +45,5 @@ def append_date(date):
 @three_columns_ui.route('/three-columns/contents/<id>')
 @cache.cached(timeout=10800)
 def get_content(id):
-    r = Crawler().send_request('http://news-at.zhihu.com/api/4/news/' + id)
+    r = Crawler().send_request('https://news-at.zhihu.com/api/4/news/' + id)
     return jsonify(body=r.json()['body'])
