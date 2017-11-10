@@ -17,8 +17,8 @@ text_ui = Blueprint('text_ui', __name__, template_folder='templates')
 @cache.cached(timeout=900)
 def index():
     """The index page, for 文字 UI."""
-    day = Date()
-    news = Zhihudaily.get(Zhihudaily.date == day.today)
+    news = Zhihudaily.select().order_by(Zhihudaily.date.desc()).first()
+    day = Date(news.date)
 
     return render_template("index.html",
                            lists=json.loads(news.json_news),
