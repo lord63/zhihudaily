@@ -54,3 +54,8 @@ def before(date):
                            display_date=news.display_date,
                            day_before=day.day_before,
                            day_after=day.day_after)
+
+
+@text_ui.errorhandler(Zhihudaily.DoesNotExist)
+def handle_record_not_exist(e):
+    return render_template("not_found.html")
