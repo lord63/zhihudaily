@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import
 
-from flask.ext.cache import Cache
+from flask_cache import Cache
 
 
 cache = Cache()

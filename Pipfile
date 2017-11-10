@@ -1,0 +1,18 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+Flask = ">=0.10.1"
+requests = ">=2.5.1"
+peewee = ">=2.4.7"
+flask-paginate = ">=0.2.8"
+redis = ">=2.10.3"
+flask-cache = ">=0.13.1"
+
+[dev-packages]
+

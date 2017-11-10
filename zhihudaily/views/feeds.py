@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, unicode_literals
-
-from urlparse import urljoin
+from __future__ import absolute_import
 
 from werkzeug.contrib.atom import AtomFeed
 from flask import request, Blueprint, json
@@ -13,6 +11,7 @@ from zhihudaily.configs import Config
 from zhihudaily.models import Zhihudaily
 from zhihudaily.utils import Date
 from zhihudaily.crawler import Crawler
+from zhihudaily._compat import urljoin
 
 
 feeds = Blueprint('feeds', __name__, template_folder='templates')

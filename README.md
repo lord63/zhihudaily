@@ -12,20 +12,20 @@ clone the source code:
 
     $ git clone git@github.com:lord63/zhihudaily.git
 
-set up the development environment, virtualenv is recommended:
+set up the development environment, pipenv is recommended:
 
-    $ virtualenv venv
-    $ . venv/bin/activate
-    $ pip install -r requirements.txt
+    $ pipenv install
+    $ pipenv shell
+    $ export FLASK_APP=manage.py
 
 init the database(default is fetching last 10 days news, you can also specify
 the number of days by -n):
 
-    $ python fetch_data.py init
+    $ flask init_db
 
 run the zhihudaily:
 
-    $ python run.py runserver
+    $ flask run
 
 open your browser and have a look.
 

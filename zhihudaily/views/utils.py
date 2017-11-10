@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, unicode_literals
-
-from StringIO import StringIO
+from __future__ import absolute_import
 
 from flask import send_file, g, Blueprint
 
 from zhihudaily.configs import Config
 from zhihudaily.crawler import Crawler
+from zhihudaily._compat import StringIO
 
 
 utils = Blueprint('utils', __name__)

@@ -3,32 +3,25 @@
 
 from __future__ import absolute_import
 
+import os
+
 import click
 
 from zhihudaily.crawler import Crawler
+from zhihudaily.app import create_app
+from zhihudaily.configs import DevelopConfig, ProductionConfig
 
 
-@click.group()
-def cli():
-    """Simple script to fetch the zhihudaily news.
-
-    \b
-    - init database(deault will fetch 10 days' news)
-        $ python fetch_date.py init
-    - update database(fetch today's latest news and check data integrity)
-        $ python fetch_date.py update
-    - check data integrity, make sure we won't miss a day(default check 10 days)
-        $ python fetch_date.py check
-
-    get more detailed info for each subcommand via <subcommand --help>
-    """
-    pass
+CONFIG = (ProductionConfig if os.environ.get('FLASK_APP_ENV') == 'production'
+          else DevelopConfig)
+app = create_app(CONFIG)
+crawler = Crawler()
 
 
-@cli.command()
+@app.cli.command()
 @click.option('--num', '-n', default=10)
 @click.option('--all', is_flag=True)
-def init(num, all):
+def init_db(num, all):
     """init database.
 
     \b
@@ -41,16 +34,16 @@ def init(num, all):
         crawler.init_database(num)
 
 
-@cli.command()
-def update():
+@app.cli.command()
+def update_news():
     """Fetch today's latest news and save to database."""
     crawler.daily_update()
 
 
-@cli.command()
+@app.cli.command()
 @click.option('--range', '-r', default=10)
 @click.option('--all', is_flag=True)
-def check(range, all):
+def check_news(range, all):
     """check data integrity.
 
     \b
@@ -61,8 +54,3 @@ def check(range, all):
         crawler.check_integrity('all')
     else:
         crawler.check_integrity(range)
-
-
-if __name__ == '__main__':
-    crawler = Crawler()
-    cli()

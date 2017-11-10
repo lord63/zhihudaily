@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import
 
 from flask import render_template, Blueprint, json
-from flask.ext.paginate import Pagination
+from flask_paginate import Pagination
 
 from zhihudaily.models import Zhihudaily
 from zhihudaily.cache import cache
