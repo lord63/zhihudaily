@@ -17,7 +17,6 @@ blueprints = [
     'zhihudaily.views.with_image:image_ui',
     'zhihudaily.views.pages:pages_ui',
     'zhihudaily.views.three_columns:three_columns_ui',
-    'zhihudaily.views.feeds:feeds',
 ]
 
 

@@ -14,6 +14,7 @@ from zhihudaily.crawler import Crawler
 from zhihudaily._compat import urljoin
 
 
+# This is the feeds blueprint, but it is deprecated now.
 feeds = Blueprint('feeds', __name__, template_folder='templates')
 redis_server = Config.redis_server
 
