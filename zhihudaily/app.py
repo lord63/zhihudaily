@@ -9,6 +9,7 @@ from werkzeug.utils import import_string
 
 extensions = [
     'zhihudaily.cache:cache',
+    'zhihudaily.extensions:sentry',
 ]
 
 blueprints = [
