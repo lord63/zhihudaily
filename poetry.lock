@@ -51,11 +51,11 @@ dotenv = ["python-dotenv"]
 
 [[package]]
 category = "main"
-description = "Adds cache support to your Flask application"
-name = "flask-cache"
+description = "Adds caching support to your Flask application"
+name = "flask-caching"
 optional = false
 python-versions = "*"
-version = "0.13.1"
+version = "1.9.0"
 
 [package.dependencies]
 Flask = "*"
@@ -193,7 +193,7 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "ed6840b5d9a2ccc4d7b60554598a12bbed8dacc2f5f8f6816b71c906dc3da016"
+content-hash = "2ad54e978f96aa37eeb0360bf98b49509e0a3fac6a05cb3f34bf80348121936e"
 python-versions = "^3.5"
 
 [metadata.files]
@@ -216,10 +216,9 @@ flask = [
     {file = "Flask-1.1.2-py2.py3-none-any.whl", hash = "sha256:8a4fdd8936eba2512e9c85df320a37e694c93945b33ef33c89946a340a238557"},
     {file = "Flask-1.1.2.tar.gz", hash = "sha256:4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060"},
 ]
-flask-cache = [
-    {file = "Flask-Cache-0.13.1.tar.gz", hash = "sha256:90126ca9bc063854ef8ee276e95d38b2b4ec8e45fd77d5751d37971ee27c7ef4"},
-    {file = "Flask_Cache-0.13.1-py2.7.egg", hash = "sha256:33187b3ddceeee233fe3db68ffcc118b5498e8ad28edde711bcbdcbf4924ce35"},
-    {file = "Flask_Cache-0.13.1-py3.3.egg", hash = "sha256:ae9d1ac4549517dfbc1f178ccc5429f61f836be3cc109a0b2481c98b3711c329"},
+flask-caching = [
+    {file = "Flask-Caching-1.9.0.tar.gz", hash = "sha256:a0356ad868b1d8ec2d0e675a6fe891c41303128f8904d5d79e180d8b3f952aff"},
+    {file = "Flask_Caching-1.9.0-py2.py3-none-any.whl", hash = "sha256:e6ef2e2af84e13c4fd32c1839c1943a42f11b6b0fbcfdd6bf46547ea5482dbfe"},
 ]
 flask-paginate = [
     {file = "flask_paginate-0.7.0-py2.py3-none-any.whl", hash = "sha256:4d5c746e4f7b639a9bb72fac0c2452d58e5297b88d6ecda3340153a59453d581"},

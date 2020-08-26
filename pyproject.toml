@@ -12,8 +12,8 @@ requests = "^2.24.0"
 peewee = "^3.13.3"
 flask-paginate = "^0.7.0"
 redis = "^3.5.3"
-flask-cache = "^0.13.1"
 raven = {version = "^6.10.0", extras = ["flask"]}
+flask-caching = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 
