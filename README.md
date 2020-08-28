@@ -12,10 +12,9 @@ clone the source code:
 
     $ git clone git@github.com:lord63/zhihudaily.git
 
-set up the development environment, pipenv is recommended:
+set up the development environment, [poetry](https://github.com/python-poetry/poetry) is recommended:
 
-    $ pipenv install
-    $ pipenv shell
+    $ poetry install
     $ export FLASK_APP=manage.py
 
 init the database(default is fetching last 10 days news, you can also specify
