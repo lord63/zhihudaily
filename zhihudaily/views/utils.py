@@ -16,7 +16,7 @@ utils = Blueprint('utils', __name__)
 @utils.before_app_request
 def before_request():
     g.db = Config.database
-    g.db.get_conn()
+    g.db.connect()
 
 
 @utils.after_app_request
